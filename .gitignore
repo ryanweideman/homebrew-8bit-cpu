@@ -1,0 +1,9 @@
+build/
+
+assembler
+!assembler/
+
+decoder_generator
+
+emulator
+!emulator/
