@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 
         // Reset cursor
         std::cout << "\x1b[H\x1b[J" << std::endl;
-        
+
         if (state.microcode_counter == 0 && clock == 0) {
             current_opcode =
                 cpu::get_opcode_for_value(prog_rom[state.program_counter] >> 2);

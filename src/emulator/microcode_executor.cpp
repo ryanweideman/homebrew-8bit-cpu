@@ -252,7 +252,8 @@ State handle_falling_edge(State current_state, cpu::Microcode microcode,
         } else if (current_state.lower_register == 1) {
             next_state.port_1 = prog_rom_val;
         } else {
-            std::cerr << "port " << std::to_string(prog_rom_val) << " not supported" << std::endl;
+            std::cerr << "port " << std::to_string(prog_rom_val)
+                      << " not supported" << std::endl;
             exit(1);
         }
         break;
@@ -272,7 +273,7 @@ std::string byte_to_hex_string(const uint8_t val) {
 State get_next_state(
     State current_state, uint8_t clock, const std::vector<uint8_t> &prog_rom,
     const std::array<uint16_t, cpu::DECODER_SIZE> &decoder_rom) {
-    const uint16_t microcode = get_microcode_bytes(current_state, decoder_rom);
+    const uint16_t microcode  = get_microcode_bytes(current_state, decoder_rom);
     const cpu::Microcode code = cpu::get_microcode_from_value(microcode);
 
     std::cout << "Microcode : " << cpu::get_microcode_string_from_code(code)
@@ -282,8 +283,8 @@ State get_next_state(
                               ((microcode & 0x20) >> 3);
     uint8_t microcode_reset = (microcode & 0x100) >> 8;
 
-    // A single microcode instruction starts with the falling edge, and ends with the
-    // the rising edge
+    // A single microcode instruction starts with the falling edge, and ends
+    // with the the rising edge
     const State next_state =
         clock == 1 ? handle_rising_edge(current_state, code, register_select,
                                         microcode_reset, prog_rom)
