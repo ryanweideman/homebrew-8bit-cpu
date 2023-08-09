@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
     const std::string hex_file_name = argv[1];
 
     const std::array<uint16_t, cpu::DECODER_SIZE> decoder_rom =
-        generate_decode_logic();
+        decoder::generate_decode_logic();
     const std::vector<uint8_t> prog_rom = get_prog_rom(hex_file_name);
 
     std::cout << decoder_rom.size() << " " << prog_rom.size() << std::endl;

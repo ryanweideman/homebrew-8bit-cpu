@@ -1,13 +1,16 @@
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <iostream>
 #include <tuple>
 #include <vector>
 
 #include "../cpu.h"
+
+namespace decoder {
 
 void write_data(std::array<uint16_t, cpu::DECODER_SIZE> &data, uint8_t c,
                 uint8_t z, uint8_t n, uint8_t opcode, uint8_t reg,
@@ -286,19 +289,30 @@ std::array<uint16_t, cpu::DECODER_SIZE> generate_decode_logic() {
     return rom;
 }
 
-void generate_decode_logic_and_files() {
-    std::array<uint16_t, cpu::DECODER_SIZE> rom = generate_decode_logic();
-    FILE *fptr_lower = fopen("decoder_rom_lower", "w");
-    for (int i = 0; i < cpu::DECODER_SIZE; i++) {
-        uint8_t d = (uint8_t)(rom[i] & 0xFF);
-        fprintf(fptr_lower, "%02x ", d);
-    }
-    fclose(fptr_lower);
-
-    FILE *fptr_upper = fopen("decoder_rom_upper", "w");
-    for (int i = 0; i < cpu::DECODER_SIZE; i++) {
-        uint8_t d = (uint8_t)((rom[i] >> 8) & 0xFF);
-        fprintf(fptr_upper, "%02x ", d);
-    }
-    fclose(fptr_upper);
+std::string byte_to_hex_string(const uint8_t val) {
+    std::stringstream stream;
+    stream << std::setfill('0') << std::setw(2) << std::right << std::hex
+           << static_cast<int>(val);
+    return stream.str();
 }
+
+void generate_decoder_images(
+    std::array<uint16_t, cpu::DECODER_SIZE> &decoder_rom) {
+    std::ofstream lower_rom_image;
+    lower_rom_image.open("decoder_rom_lower");
+    for (int i = 0; i < cpu::DECODER_SIZE; i++) {
+        uint8_t d = (uint8_t)(decoder_rom[i] & 0xFF);
+        lower_rom_image << byte_to_hex_string(d) << " ";
+    }
+    lower_rom_image.close();
+
+    std::ofstream upper_rom_image;
+    upper_rom_image.open("decoder_rom_upper");
+    for (int i = 0; i < cpu::DECODER_SIZE; i++) {
+        uint8_t d = (uint8_t)((decoder_rom[i] >> 8) & 0xFF);
+        upper_rom_image << byte_to_hex_string(d) << " ";
+    }
+    upper_rom_image.close();
+}
+
+} // namespace decoder
