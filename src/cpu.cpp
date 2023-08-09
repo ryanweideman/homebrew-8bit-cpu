@@ -1,4 +1,6 @@
 #include "cpu.h"
+#include <string>
+#include <vector>
 
 namespace cpu {
 
@@ -24,8 +26,7 @@ Microcode get_microcode_from_value(uint16_t value) {
             return microcode_instruction.microcode_;
         }
     }
-    std::cerr << "Failed to get microcode from string." << std::endl;
-    exit(1);
+    throw std::runtime_error("Failed to get microcode from string");
 }
 
 std::string get_microcode_string_from_code(Microcode code) {
@@ -35,8 +36,7 @@ std::string get_microcode_string_from_code(Microcode code) {
             return microcode_instruction.mnemonic_;
         }
     }
-    std::cerr << "Failed to get string of microcode." << std::endl;
-    exit(1);
+    throw std::runtime_error("Failed to get string of microcode");
 }
 
 uint8_t get_value_of_opcode(Opcode opcode) {
@@ -45,8 +45,7 @@ uint8_t get_value_of_opcode(Opcode opcode) {
             return instruction.opcode_value_;
         }
     }
-    std::cerr << "Failed to get value of opcode." << std::endl;
-    exit(1);
+    throw std::runtime_error("Failed to get value of opcode");
 }
 
 Opcode get_opcode_for_value(uint8_t opcode) {
@@ -55,8 +54,7 @@ Opcode get_opcode_for_value(uint8_t opcode) {
             return instruction.opcode_;
         }
     }
-    std::cerr << "Failed to get Opcode for value." << std::endl;
-    exit(1);
+    throw std::runtime_error("Failed to get Opcode for value");
 }
 
 Opcode get_opcode_for_string(const std::string opcode_string) {
@@ -65,9 +63,8 @@ Opcode get_opcode_for_string(const std::string opcode_string) {
             return instruction.opcode_;
         }
     }
-    std::cerr << "Failed to get Opcode for string: " << opcode_string
-              << std::endl;
-    exit(1);
+    throw std::runtime_error("Failed to get Opcode for string: " +
+                             std::string(opcode_string));
 }
 
 std::string get_string_for_opcode(const Opcode opcode) {
@@ -76,8 +73,7 @@ std::string get_string_for_opcode(const Opcode opcode) {
             return instruction.mnemonic_;
         }
     }
-    std::cerr << "Failed to get string of opcode." << std::endl;
-    exit(1);
+    throw std::runtime_error("Failed to get string of opcode");
 }
 
 uint8_t get_num_bytes_for_instruction(const Opcode opcode) {
@@ -86,8 +82,7 @@ uint8_t get_num_bytes_for_instruction(const Opcode opcode) {
             return instruction.rom_size_;
         }
     }
-    std::cerr << "Failed to get num bytes for opcode." << std::endl;
-    exit(1);
+    throw std::runtime_error("Failed to get num bytes for opcode");
 }
 
 std::vector<cpu::Instruction> get_instructions() { return instruction_list; }

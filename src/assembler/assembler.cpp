@@ -19,9 +19,8 @@ void assemble(const std::string input_file_name,
     std::ifstream in_file;
     in_file.open(input_file_name);
     if (in_file.fail()) {
-        printf("Could not open ASM file. Provide file and make sure it is "
-               "valid.\n\r");
-        exit(1);
+        throw std::runtime_error("Could not open asm file with name: " +
+                                 input_file_name);
     }
     std::cout << "Parsing asm file with path: " << input_file_name << std::endl;
 
@@ -36,10 +35,8 @@ void assemble(const std::string input_file_name,
         std::string line;
         while (std::getline(in_file, line)) {
             if (program_counter >= 32768) {
-                std::cout << "Error: Max rom available is 32768 bytes, shorten "
-                             "the asm program"
-                          << std::endl;
-                exit(1);
+                throw std::runtime_error("Max rom available is 32768 bytes, "
+                                         "shorten the asm program");
             }
 
             const std::vector<std::string> tokenized_line =
@@ -67,10 +64,8 @@ void assemble(const std::string input_file_name,
             if (tokenized_line[0] == "%macro") {
                 std::cout << "parsing macro" << std::endl;
                 if (!std::getline(in_file, line)) {
-                    std::cout
-                        << "file unexpectedly ended during macro processing"
-                        << std::endl;
-                    exit(1);
+                    throw std::invalid_argument(
+                        "File unexpectedly ended while processing macro");
                 }
                 const std::vector<std::string> macro_name_and_args =
                     tokenizer::tokenize_line(line);

@@ -56,6 +56,6 @@ add_executable(emulator
 	src/emulator/state.h
 	src/emulator/state.cpp)
 
-#target_compile_options(emulator
-#	PRIVATE
-#	${flags})
+target_compile_options(emulator
+	PRIVATE
+	${flags})

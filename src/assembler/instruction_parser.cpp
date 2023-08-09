@@ -77,8 +77,8 @@ std::string InstructionParser::parse_store_address_type_instruction(
     const uint8_t source_reg = parse_register_string(tokens[1]);
 
     if (source_reg > 1) {
-        std::cerr << "Cannot store register " << tokens[1] << std::endl;
-        exit(1);
+        throw std::invalid_argument("Cannot store register " +
+                                    std::string(tokens[1]));
     }
 
     const uint16_t address          = std::stoi(tokens[2]);
@@ -125,8 +125,8 @@ std::string InstructionParser::parse_move_type_instruction(
     const uint8_t destination_reg = std::stoi(tokens[2].substr(1, 1));
 
     if (source_reg > 1) {
-        std::cerr << "Cannot mov source register " << tokens[1] << std::endl;
-        exit(1);
+        throw std::invalid_argument("Cannot mov source register " +
+                                    std::string(tokens[1]));
     }
 
     uint8_t instruction_reg;
@@ -243,7 +243,6 @@ std::string InstructionParser::parse_instruction(
         return parse_out_instruction(cpu::M_OUT, symbols);
     }
 
-    std::cerr << "Unknown opcode in instruction parsing" << std::endl;
-    exit(1);
-    return "";
+    throw std::invalid_argument("Unknown opcode in instruction parsing: " +
+                                std::string(symbols[0]));
 }

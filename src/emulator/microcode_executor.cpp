@@ -22,7 +22,9 @@ State set_register_state(State current_state, uint8_t register_select,
     } else if (register_select == 4) {
         next_state.upper_register = val;
     } else {
-        exit(1);
+        throw std::runtime_error("register with value [" +
+                                 std::to_string(register_select) +
+                                 "] does not exist");
     }
     return next_state;
 }
@@ -252,9 +254,8 @@ State handle_falling_edge(State current_state, cpu::Microcode microcode,
         } else if (current_state.lower_register == 1) {
             next_state.port_1 = prog_rom_val;
         } else {
-            std::cerr << "port " << std::to_string(prog_rom_val)
-                      << " not supported" << std::endl;
-            exit(1);
+            throw std::runtime_error("port " + std::to_string(prog_rom_val) +
+                                     " not supported");
         }
         break;
     }
