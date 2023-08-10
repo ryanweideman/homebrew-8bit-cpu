@@ -20,7 +20,7 @@ Microcode get_microcode_from_value(uint16_t value) {
     const uint16_t masked_value = value & U_IGNORE_REG_MASK;
 
     for (const MicrocodeInstruction &microcode_instruction :
-         cpu::microcode_instruction_list) {
+         microcode_instruction_list) {
         if (masked_value ==
             (microcode_instruction.microcode_value_ & U_IGNORE_REG_MASK)) {
             return microcode_instruction.microcode_;
@@ -40,7 +40,7 @@ std::string get_microcode_string_from_code(Microcode code) {
 }
 
 uint8_t get_value_of_opcode(Opcode opcode) {
-    for (const Instruction &instruction : cpu::instruction_list) {
+    for (const Instruction &instruction : instruction_list) {
         if (opcode == instruction.opcode_) {
             return instruction.opcode_value_;
         }
@@ -49,7 +49,7 @@ uint8_t get_value_of_opcode(Opcode opcode) {
 }
 
 Opcode get_opcode_for_value(uint8_t opcode) {
-    for (const Instruction &instruction : cpu::instruction_list) {
+    for (const Instruction &instruction : instruction_list) {
         if (opcode == instruction.opcode_value_) {
             return instruction.opcode_;
         }
@@ -57,18 +57,30 @@ Opcode get_opcode_for_value(uint8_t opcode) {
     throw std::runtime_error("Failed to get Opcode for value");
 }
 
-Opcode get_opcode_for_string(const std::string opcode_string) {
-    for (const Instruction &instruction : cpu::instruction_list) {
-        if (opcode_string == instruction.mnemonic_) {
+Opcode get_opcode_of_instruction(const std::vector<std::string> &symbols) {
+    if (symbols[0] == "mov") {
+        const uint8_t source_reg = std::stoi(symbols[1].substr(1, 1));
+        if (source_reg == 0) {
+            return Opcode::MOVA;
+        } else if (source_reg == 1) {
+            return Opcode::MOVB;
+        }
+    }
+
+    for (const Instruction &instruction : instruction_list) {
+        if (symbols[0] == instruction.mnemonic_) {
             return instruction.opcode_;
         }
     }
-    throw std::runtime_error("Failed to get Opcode for string: " +
-                             std::string(opcode_string));
+    std::string error;
+    for (const std::string symbol : symbols) {
+        error += symbol;
+    }
+    throw std::runtime_error("Failed to get Opcode for line: " + error);
 }
 
 std::string get_string_for_opcode(const Opcode opcode) {
-    for (const Instruction &instruction : cpu::instruction_list) {
+    for (const Instruction &instruction : instruction_list) {
         if (opcode == instruction.opcode_) {
             return instruction.mnemonic_;
         }
@@ -77,7 +89,7 @@ std::string get_string_for_opcode(const Opcode opcode) {
 }
 
 uint8_t get_num_bytes_for_instruction(const Opcode opcode) {
-    for (const Instruction &instruction : cpu::instruction_list) {
+    for (const Instruction &instruction : instruction_list) {
         if (opcode == instruction.opcode_) {
             return instruction.rom_size_;
         }

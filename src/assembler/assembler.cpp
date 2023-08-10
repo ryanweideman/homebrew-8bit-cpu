@@ -112,7 +112,7 @@ void assemble(const std::string input_file_name,
                         continue;
                     }
                     const cpu::Opcode opcode =
-                        cpu::get_opcode_for_string(macro_instruction[0]);
+                        cpu::get_opcode_of_instruction(macro_instruction);
                     program_counter +=
                         cpu::get_num_bytes_for_instruction(opcode);
                     symbol_table.push_back(macro_instruction);
@@ -129,7 +129,7 @@ void assemble(const std::string input_file_name,
                 continue;
             }
 
-            cpu::Opcode opcode = cpu::get_opcode_for_string(tokenized_line[0]);
+            cpu::Opcode opcode = cpu::get_opcode_of_instruction(tokenized_line);
             program_counter += cpu::get_num_bytes_for_instruction(opcode);
 
             // Store instruction

@@ -152,19 +152,7 @@ std::string InstructionParser::parse_out_instruction(
 std::string InstructionParser::parse_instruction(
     const std::vector<std::string> &symbols) const {
 
-    cpu::Opcode opcode;
-    if (symbols[0] == "mov") {
-        const uint8_t source_reg = std::stoi(symbols[1].substr(1, 1));
-        if (source_reg == 0) {
-            opcode = cpu::Opcode::MOVA;
-        } else if (source_reg == 1) {
-            opcode = cpu::Opcode::MOVB;
-        }
-    } else {
-        opcode = cpu::get_opcode_for_string(symbols[0]);
-    }
-
-    std::cout << cpu::get_string_for_opcode(opcode) << std::endl;
+    cpu::Opcode opcode = cpu::get_opcode_of_instruction(symbols);
 
     switch (opcode) {
     case cpu::Opcode::ADD:
@@ -244,5 +232,5 @@ std::string InstructionParser::parse_instruction(
     }
 
     throw std::invalid_argument("Unknown opcode in instruction parsing: " +
-                                std::string(symbols[0]));
+                                symbols[0]);
 }

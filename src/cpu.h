@@ -184,7 +184,7 @@ Microcode get_microcode_from_value(uint16_t value);
 std::string get_microcode_string_from_code(Microcode code);
 uint8_t get_value_of_opcode(Opcode opcode);
 Opcode get_opcode_for_value(uint8_t opcode);
-Opcode get_opcode_for_string(const std::string opcode_string);
+Opcode get_opcode_of_instruction(const std::vector<std::string> &symbols);
 std::string get_string_for_opcode(const Opcode opcode);
 uint8_t get_num_bytes_for_instruction(const Opcode opcode);
 std::vector<Instruction> get_instructions();
