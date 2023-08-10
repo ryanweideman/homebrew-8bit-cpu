@@ -18,20 +18,23 @@ uint16_t get_microcode_bytes(
 }
 
 void print_state(State state) {
-    std::cout << "program_counter: " << state.program_counter << std::endl;
-    std::cout << "microcode_counter: " << state.microcode_counter << std::endl;
-    std::cout << "instruction_register: "
-              << std::to_string(state.instruction_register) << std::endl;
-    std::cout << "flag_register: " << std::to_string(state.flag_register)
+    std::cout << "~~~ Counters ~~~" << std::endl;
+    std::cout << "program_counter : " << state.program_counter << std::endl;
+    std::cout << "microcode_counter : " << state.microcode_counter << std::endl
               << std::endl;
-    std::cout << "upper_register: " << std::to_string(state.upper_register)
+
+    std::cout << "~~~ Registers ~~~" << std::endl;
+    std::cout << "instruction: " << std::to_string(state.instruction_register)
               << std::endl;
-    std::cout << "lower_register: " << std::to_string(state.lower_register)
+    std::cout << "flags : " << std::to_string(state.flag_register) << std::endl;
+    std::cout << "upper : " << std::to_string(state.upper_register)
               << std::endl;
-    std::cout << "a_register: " << std::to_string(state.a_register)
+    std::cout << "lower : " << std::to_string(state.lower_register)
               << std::endl;
-    std::cout << "b_register: " << std::to_string(state.b_register)
+    std::cout << "a : " << std::to_string(state.a_register) << std::endl;
+    std::cout << "b : " << std::to_string(state.b_register) << std::endl
               << std::endl;
-    std::cout << "port_0: " << std::to_string(state.port_0) << std::endl;
-    std::cout << "port_1: " << std::to_string(state.port_1) << std::endl;
+    std::cout << "~~~ Ports ~~~" << std::endl;
+    std::cout << "0 : " << std::to_string(state.port_0) << std::endl;
+    std::cout << "1 : " << std::to_string(state.port_1) << std::endl;
 }

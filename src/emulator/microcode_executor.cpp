@@ -277,8 +277,6 @@ State get_next_state(
     const uint16_t microcode  = get_microcode_bytes(current_state, decoder_rom);
     const cpu::Microcode code = cpu::get_microcode_from_value(microcode);
 
-    std::cout << "Microcode : " << cpu::get_microcode_string_from_code(code)
-              << std::endl;
     uint8_t register_select = ((microcode & 0x80) >> 7) |
                               ((microcode & 0x40) >> 5) |
                               ((microcode & 0x20) >> 3);
