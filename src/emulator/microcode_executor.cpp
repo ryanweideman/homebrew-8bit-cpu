@@ -276,7 +276,10 @@ std::string byte_to_hex_string(const uint8_t val) {
 State get_next_state(
     State current_state, uint8_t clock, const std::vector<uint8_t> &prog_rom,
     const std::array<uint16_t, cpu::DECODER_SIZE> &decoder_rom) {
-    const uint16_t microcode  = get_microcode_bytes(current_state, decoder_rom);
+    const uint16_t microcode_address =
+        current_state.microcode_counter | (current_state.flag_register << 4) |
+        (current_state.instruction_register << 7);
+    const uint16_t microcode  = decoder_rom[microcode_address];
     const cpu::Microcode code = cpu::get_microcode_from_value(microcode);
 
     uint8_t register_select = ((microcode & 0x80) >> 7) |

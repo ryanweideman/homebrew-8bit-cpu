@@ -8,15 +8,6 @@ State::State()
       flag_register(0), upper_register(0), lower_register(0), a_register(0),
       b_register(0), port_0(0), port_1(0) {}
 
-uint16_t get_microcode_bytes(
-    State state, const std::array<uint16_t, cpu::DECODER_SIZE> &microcode_rom) {
-    uint16_t microcode_address = state.microcode_counter |
-                                 (state.flag_register << 4) |
-                                 (state.instruction_register << 7);
-
-    return microcode_rom[microcode_address];
-}
-
 void print_state(State state) {
     std::cout << "~~~ Counters ~~~" << std::endl;
     std::cout << "program_counter : " << state.program_counter << std::endl;

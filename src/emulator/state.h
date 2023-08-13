@@ -21,9 +21,6 @@ struct State {
     State();
 };
 
-uint16_t get_microcode_bytes(
-    State state, const std::array<uint16_t, cpu::DECODER_SIZE> &microcode_rom);
-
 void print_state(State state);
 
 #endif
