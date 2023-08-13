@@ -7,88 +7,58 @@
 
 #include "../cpu.h"
 #include "../decoder/decoder.h"
+#include "emulator.h"
 #include "microcode_executor.h"
+#include "renderer.h"
 #include "state.h"
 
-std::vector<std::string> tokenize_line(const std::string &line) {
-    std::vector<std::string> result;
-    std::stringstream ss(line);
-    std::string word;
-    while (ss >> word) {
-        result.push_back(word);
-    }
-    return result;
+Emulator::Emulator(const State initial_state, const ProgramRom &prog_rom,
+                   const DecoderRom &decoder_rom)
+    : current_state_(initial_state), prog_rom_(prog_rom),
+      decoder_rom_(decoder_rom), clock_(0), total_number_clock_cycles_(0),
+      total_number_instructions_(0) {
+    current_opcode_ =
+        cpu::get_opcode_for_value(prog_rom[initial_state.program_counter] >> 2);
+    current_opcode_address_ = initial_state.program_counter;
+    program_size_in_bytes_  = static_cast<int>(prog_rom.size());
 }
 
-std::vector<uint8_t> get_prog_rom(const std::string &hex_file_name) {
-    std::ifstream in_file;
-    in_file.open(hex_file_name);
+void Emulator::advance_one_clock_edge() {
+    clock_ ^= 1;
+    previous_state_ = current_state_;
+    current_state_  = microcode_executor::get_next_state(
+        current_state_, clock_, prog_rom_, decoder_rom_);
 
-    std::vector<uint8_t> prog_rom;
-    if (in_file.is_open()) {
-        std::string line;
-        std::getline(in_file, line);
-        const std::vector<std::string> tokenized_line = tokenize_line(line);
-        for (const std::string token : tokenized_line) {
-            prog_rom.push_back(static_cast<uint8_t>(std::stoi(token, 0, 16)));
-        }
+    total_number_clock_cycles_ += clock_ == 1 ? 1 : 0;
+    if (current_state_.microcode_counter == 0 && clock_ == 0) {
+        total_number_instructions_++;
+        current_opcode_ = cpu::get_opcode_for_value(
+            prog_rom_[current_state_.program_counter] >> 2);
+        current_opcode_address_ = current_state_.program_counter;
     }
-
-    return prog_rom;
 }
 
-void print_instruction(State state, const std::vector<uint8_t> &prog_rom) {
-    cpu::Opcode opcode =
-        cpu::get_opcode_for_value(prog_rom[state.program_counter] >> 2);
-    std::cout << "Instruction : " << cpu::get_string_for_opcode(opcode)
-              << std::endl;
+State Emulator::get_current_state() { return current_state_; }
+
+State Emulator::get_previous_state() { return previous_state_; }
+
+int Emulator::get_clock_state() { return clock_; }
+
+cpu::Opcode Emulator::get_current_opcode() { return current_opcode_; }
+
+uint16_t Emulator::get_current_opcode_address() {
+    return current_opcode_address_;
 }
 
-int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        printf("Format: [input].hex\n");
-        return 1;
-    }
-    const std::string hex_file_name = argv[1];
+float Emulator::get_clock_cycles_per_instruction() {
+    return static_cast<float>(total_number_clock_cycles_) /
+           total_number_instructions_;
+}
 
-    const std::array<uint16_t, cpu::DECODER_SIZE> decoder_rom =
-        decoder::generate_decode_logic();
-    const std::vector<uint8_t> prog_rom = get_prog_rom(hex_file_name);
+int Emulator::get_total_number_clock_cycles() {
+    return total_number_clock_cycles_;
+}
 
-    State state;
-
-    cpu::Opcode current_opcode =
-        cpu::get_opcode_for_value(prog_rom[state.program_counter] >> 2);
-
-    uint8_t clock = 0;
-    for (int step = 0; step < 200; step++) {
-        usleep(1000000);
-
-        // Reset cursor
-        std::cout << "\x1b[H\x1b[J" << std::endl;
-
-        if (state.microcode_counter == 0 && clock == 0) {
-            current_opcode =
-                cpu::get_opcode_for_value(prog_rom[state.program_counter] >> 2);
-        }
-
-        State next_state = get_next_state(state, clock, prog_rom, decoder_rom);
-
-        std::cout << "Instruction : "
-                  << cpu::get_string_for_opcode(current_opcode) << std::endl;
-        const uint16_t microcode = get_microcode_bytes(next_state, decoder_rom);
-        const cpu::Microcode code = cpu::get_microcode_from_value(microcode);
-
-        std::cout << "Microcode : " << cpu::get_microcode_string_from_code(code)
-                  << std::endl;
-
-        std::cout << "clock : " << std::to_string(clock) << std::endl;
-        std::cout << std::endl;
-
-        print_state(next_state);
-        clock ^= 1;
-        state = next_state;
-    }
-
-    return 0;
+int Emulator::get_total_number_instructions() {
+    return total_number_instructions_;
 }

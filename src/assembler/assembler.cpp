@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "../cpu.h"
+#include "../instruction_serializer.h"
 #include "define_table.h"
-#include "instruction_parser.h"
 #include "label_table.h"
 #include "macro.h"
 #include "macro_generator.h"
@@ -144,7 +144,6 @@ void assemble(const std::string input_file_name,
     define_table.print();
 
     std::cout << "2nd pass, parsing instructions" << std::endl;
-    InstructionParser instruction_parser(label_table, define_table);
     std::ofstream out_file;
     out_file.open(output_file_name);
     for (const std::vector<std::string> &symbols : symbol_table) {
@@ -164,7 +163,8 @@ void assemble(const std::string input_file_name,
         }
 
         const std::string opcode = translated_symbols[0];
-        out_file << instruction_parser.parse_instruction(translated_symbols);
+        out_file << instruction_serializer::serialize_instruction(
+            translated_symbols);
     }
     out_file.close();
 }

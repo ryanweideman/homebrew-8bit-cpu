@@ -8,6 +8,8 @@
 #include "microcode_executor.h"
 #include "state.h"
 
+namespace microcode_executor {
+
 State set_register_state(State current_state, uint8_t register_select,
                          uint8_t val) {
     State next_state = current_state;
@@ -292,3 +294,5 @@ State get_next_state(
 
     return next_state;
 }
+
+} // namespace microcode_executor

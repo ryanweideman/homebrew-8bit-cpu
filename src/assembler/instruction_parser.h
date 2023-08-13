@@ -13,20 +13,13 @@
 
 class InstructionParser {
   public:
-    InstructionParser(const LabelTable &label_table,
-                      const DefineTable &define_table);
     std::vector<std::vector<std::string>> get_instructions() const;
     std::string parse_instruction(
         const std::vector<std::string> &tokenized_instruction) const;
 
   private:
-    const LabelTable label_table_;
-    const DefineTable define_table_;
-
-    void init_opcode_map();
-    std::vector<std::string>
-    replace_label_tokens_with_addresses(const std::vector<std::string> &tokens,
-                                        const LabelTable &label_table) const;
+    std::vector<std::string> replace_label_tokens_with_addresses(
+        const std::vector<std::string> &tokens) const;
     uint8_t parse_register_string(const std::string &reg) const;
     std::string byte_to_hex_string(const uint8_t val) const;
     std::string parse_basic_instruction(const uint8_t opcode) const;

@@ -12,6 +12,8 @@ project(cpu)
 
 add_executable(
 	assembler 
+	src/instruction_serializer.h 
+	src/instruction_serializer.cpp 
 	src/cpu.h
 	src/cpu.cpp
 	src/assembler/tokenizer.h 
@@ -20,8 +22,6 @@ add_executable(
 	src/assembler/define_table.cpp
 	src/assembler/tokenizer.cpp
 	src/assembler/assembler.cpp 
-	src/assembler/instruction_parser.h 
-	src/assembler/instruction_parser.cpp 
 	src/assembler/label_table.h 
 	src/assembler/label_table.cpp 
 	src/assembler/macro.h 
@@ -45,16 +45,21 @@ target_compile_options(decoder_generator
 	${flags})
 
 add_executable(emulator 
+	src/instruction_serializer.h 
+	src/instruction_serializer.cpp 
 	src/cpu.h 
 	src/cpu.cpp 
 	src/decoder/decoder.h
 	src/decoder/decoder.cpp
+	src/emulator/main.cpp
 	src/emulator/emulator.h
 	src/emulator/emulator.cpp
 	src/emulator/microcode_executor.h
 	src/emulator/microcode_executor.cpp
 	src/emulator/state.h
-	src/emulator/state.cpp)
+	src/emulator/state.cpp
+	src/emulator/renderer.h
+	src/emulator/renderer.cpp)
 
 target_compile_options(emulator
 	PRIVATE
