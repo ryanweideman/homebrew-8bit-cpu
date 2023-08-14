@@ -16,3 +16,4 @@ project(cpu)
 add_compile_options(-Wall -Werror -Wextra -Werror=switch-enum)
 
 add_subdirectory(src)
+add_subdirectory(test)

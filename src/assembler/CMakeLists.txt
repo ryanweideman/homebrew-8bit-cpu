@@ -12,8 +12,8 @@ add_library(assembler
     macro_generator.cpp)
 
 target_link_libraries(assembler cpu)
-target_include_directories(assembler INTERFACE..)
+target_include_directories(assembler INTERFACE ..)
 
 add_executable(assembler_exe assembler.cpp)
-target_link_libraries(assembler_exe assembler) set_property(
-TARGET assembler_exe PROPERTY OUTPUT_NAME assembler)
+target_link_libraries(assembler_exe assembler) 
+set_property(TARGET assembler_exe PROPERTY OUTPUT_NAME assembler)

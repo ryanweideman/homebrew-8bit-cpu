@@ -9,7 +9,7 @@ add_library(
     renderer.h 
     renderer.cpp) 
 target_link_libraries(emulator decoder cpu)
-target_include_directories(emulator INTERFACE..)
+target_include_directories(emulator INTERFACE ..)
 
 add_executable(emulator_exe main.cpp)
 target_link_libraries(emulator_exe emulator)

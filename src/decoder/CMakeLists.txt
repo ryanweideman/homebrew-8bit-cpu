@@ -3,7 +3,7 @@ add_library(
     decoder.h   
     decoder.cpp) 
 target_link_libraries(decoder cpu)
-target_include_directories(decoder INTERFACE..)
+target_include_directories(decoder INTERFACE ..)
 
 add_executable(decoder_exe main.cpp)
 target_link_libraries(decoder_exe decoder)

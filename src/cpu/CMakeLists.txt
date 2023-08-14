@@ -5,4 +5,4 @@ add_library(
     instruction_serializer.cpp 
     instruction_serializer.h)
 
-target_include_directories(cpu INTERFACE..)
+target_include_directories(cpu INTERFACE ..)
