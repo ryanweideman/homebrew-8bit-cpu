@@ -5,8 +5,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../cpu.h"
-#include "../instruction_serializer.h"
+#include <cpu/cpu.h>
+#include <cpu/instruction_serializer.h>
+
 #include "define_table.h"
 #include "label_table.h"
 #include "macro.h"

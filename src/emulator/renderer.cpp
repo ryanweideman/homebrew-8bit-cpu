@@ -2,8 +2,9 @@
 #include <iostream>
 #include <sstream>
 
-#include "../cpu.h"
-#include "../instruction_serializer.h"
+#include <cpu/cpu.h>
+#include <cpu/instruction_serializer.h>
+
 #include "renderer.h"
 
 namespace renderer {
@@ -150,7 +151,6 @@ void render_microcode(
 void render_instructions(const int row, const int col,
                          const cpu::Opcode current_opcode,
                          const uint16_t current_opcode_address,
-                         const State current_state, const int clock,
                          const std::vector<uint8_t> &prog_rom) {
 
     cpu::Opcode next_opcode               = current_opcode;
@@ -229,8 +229,7 @@ void render(const State previous_state, const State current_state,
     render_text_box(2, 0, {"~~~~~~~~~~~~~~~~~ EMULATOR ~~~~~~~~~~~~~~~~~"});
     render_text_box(3, 0, {"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"});
 
-    render_instructions(5, 2, current_opcode, current_opcode_address,
-                        current_state, clock, prog_rom);
+    render_instructions(5, 2, current_opcode, current_opcode_address, prog_rom);
     render_microcode(18, 2, current_state, decoder_rom);
 
     render_clock(5, 30, clock);

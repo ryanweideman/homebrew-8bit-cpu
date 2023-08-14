@@ -1,66 +1,18 @@
 cmake_minimum_required(VERSION 3.16.3)
 
 set(CMAKE_CXX_STANDARD 20)
-set(EXECUTABLE_OUTPUT_PATH "../")
 
-list(APPEND flags 
-	"-Wall" 
-	"-Werror" 
-	"-Werror=switch-enum")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../) 
+
+include(FetchContent)
+FetchContent_Declare(
+  	googletest
+  	URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+FetchContent_MakeAvailable(googletest)
 
 project(cpu)
 
-add_executable(
-	assembler 
-	src/instruction_serializer.h 
-	src/instruction_serializer.cpp 
-	src/cpu.h
-	src/cpu.cpp
-	src/assembler/tokenizer.h 
-	src/assembler/tokenizer.cpp
-	src/assembler/define_table.h 
-	src/assembler/define_table.cpp
-	src/assembler/tokenizer.cpp
-	src/assembler/assembler.cpp 
-	src/assembler/label_table.h 
-	src/assembler/label_table.cpp 
-	src/assembler/macro.h 
-	src/assembler/macro.cpp 
-	src/assembler/macro_generator.h
-	src/assembler/macro_generator.cpp)
+add_compile_options(-Wall -Werror -Wextra -Werror=switch-enum)
 
-target_compile_options(assembler
-	PRIVATE
-	${flags})
-
-add_executable(decoder_generator 
-	src/cpu.h 
-	src/cpu.cpp
-	src/decoder/decoder.h
-	src/decoder/decoder.cpp
-	src/decoder/decoder_main.cpp)
-
-target_compile_options(decoder_generator
-	PRIVATE
-	${flags})
-
-add_executable(emulator 
-	src/instruction_serializer.h 
-	src/instruction_serializer.cpp 
-	src/cpu.h 
-	src/cpu.cpp 
-	src/decoder/decoder.h
-	src/decoder/decoder.cpp
-	src/emulator/main.cpp
-	src/emulator/emulator.h
-	src/emulator/emulator.cpp
-	src/emulator/microcode_executor.h
-	src/emulator/microcode_executor.cpp
-	src/emulator/state.h
-	src/emulator/state.cpp
-	src/emulator/renderer.h
-	src/emulator/renderer.cpp)
-
-target_compile_options(emulator
-	PRIVATE
-	${flags})
+add_subdirectory(src)

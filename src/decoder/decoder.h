@@ -8,7 +8,7 @@
 #include <string.h>
 #include <vector>
 
-#include "../cpu.h"
+#include <cpu/cpu.h>
 
 namespace decoder {
 

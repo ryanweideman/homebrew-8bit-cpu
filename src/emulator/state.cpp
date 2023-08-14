@@ -1,6 +1,7 @@
 #include <string>
 
-#include "../cpu.h"
+#include <cpu/cpu.h>
+
 #include "state.h"
 
 State::State()

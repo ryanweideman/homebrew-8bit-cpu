@@ -5,8 +5,9 @@
 #include <unistd.h>
 #include <vector>
 
-#include "../cpu.h"
-#include "../decoder/decoder.h"
+#include <cpu/cpu.h>
+#include <decoder/decoder.h>
+
 #include "emulator.h"
 #include "microcode_executor.h"
 #include "renderer.h"

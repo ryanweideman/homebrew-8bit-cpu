@@ -4,7 +4,8 @@
 #include <sstream>
 #include <string>
 
-#include "../cpu.h"
+#include <cpu/cpu.h>
+
 #include "microcode_executor.h"
 #include "state.h"
 
@@ -41,8 +42,7 @@ State set_flag_state(const State current_state, const bool is_carry_set,
 }
 
 State handle_rising_edge(State current_state, cpu::Microcode microcode,
-                         uint8_t register_select, uint8_t microcode_reset,
-                         const std::vector<uint8_t> &prog_rom) {
+                         uint8_t microcode_reset) {
     State next_state = current_state;
 
     if (microcode_reset == 0) {
@@ -85,7 +85,7 @@ State handle_rising_edge(State current_state, cpu::Microcode microcode,
 }
 
 State handle_falling_edge(State current_state, cpu::Microcode microcode,
-                          uint8_t register_select, uint8_t microcode_reset,
+                          uint8_t register_select,
                           const std::vector<uint8_t> &prog_rom) {
     State next_state = current_state;
 
@@ -290,10 +290,9 @@ State get_next_state(
     // A single microcode instruction starts with the falling edge, and ends
     // with the the rising edge
     const State next_state =
-        clock == 1 ? handle_rising_edge(current_state, code, register_select,
-                                        microcode_reset, prog_rom)
+        clock == 1 ? handle_rising_edge(current_state, code, microcode_reset)
                    : handle_falling_edge(current_state, code, register_select,
-                                         microcode_reset, prog_rom);
+                                         prog_rom);
 
     return next_state;
 }

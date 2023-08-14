@@ -1,7 +1,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "../cpu.h"
+#include <cpu/cpu.h>
 
 struct State {
     uint8_t ram[cpu::RAM_SIZE];
