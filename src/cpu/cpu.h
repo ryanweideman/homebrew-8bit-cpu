@@ -243,6 +243,7 @@ const Instruction I_BLTE = {Opcode::BLTE, M_BLTE, "blte", 3};
 const Instruction I_BE   = {Opcode::BE, M_BE, "be", 3};
 const Instruction I_BNE  = {Opcode::BNE, M_BNE, "bne", 3};
 const Instruction I_BGT  = {Opcode::BGT, M_BGT, "bgt", 3};
+const Instruction I_BGTE = {Opcode::BGTE, M_BGTE, "bgte", 3};
 const Instruction I_MOVA = {Opcode::MOVA, M_MOVA, "mov", 1};
 const Instruction I_MOVB = {Opcode::MOVB, M_MOVB, "mov", 1};
 const Instruction I_NOP  = {Opcode::NOP, M_NOP, "nop", 1};

@@ -11,10 +11,10 @@ const std::vector<MicrocodeInstruction> microcode_instruction_list = {
     MI_STI,  MI_LD,         MI_B,     MI_OUTI};
 
 const std::vector<Instruction> instruction_list = {
-    I_ADD, I_ADDI, I_ADDC, I_SUB,  I_SUBI, I_SUBC, I_NOT, I_AND,  I_ANDI,
-    I_OR,  I_ORI,  I_XOR,  I_XORI, I_SHL,  I_SHLC, I_LD,  I_LDI,  I_LDA,
-    I_ST,  I_STA,  I_STI,  I_STIA, I_CMP,  I_B,    I_BLT, I_BLTE, I_BE,
-    I_BNE, I_BGT,  I_MOVA, I_MOVB, I_NOP,  I_SETC, I_CLC, I_OUT};
+    I_ADD,  I_ADDI, I_ADDC, I_SUB, I_SUBI, I_SUBC, I_NOT,  I_AND, I_ANDI, I_OR,
+    I_ORI,  I_XOR,  I_XORI, I_SHL, I_SHLC, I_LD,   I_LDI,  I_LDA, I_ST,   I_STA,
+    I_STI,  I_STIA, I_CMP,  I_B,   I_BC,   I_BLT,  I_BLTE, I_BE,  I_BNE,  I_BGT,
+    I_BGTE, I_MOVA, I_MOVB, I_NOP, I_SETC, I_CLC,  I_OUT};
 
 Microcode get_microcode_from_value(uint16_t value) {
     const uint16_t masked_value = value & U_IGNORE_REG_MASK;
@@ -74,7 +74,7 @@ Opcode get_opcode_of_instruction(const std::vector<std::string> &symbols) {
     }
     std::string error;
     for (const std::string symbol : symbols) {
-        error += symbol;
+        error += symbol + " ";
     }
     throw std::runtime_error("Failed to get Opcode for line: " + error);
 }

@@ -89,9 +89,9 @@ std::string serialize_store_imm_address_type_instruction(
     const uint8_t instruction_reg   = opcode << 2;
 
     return byte_to_hex_string(instruction_reg) + " " +
+           byte_to_hex_string(immediate_val) + " " +
            byte_to_hex_string(lower_address_reg) + " " +
-           byte_to_hex_string(upper_address_reg) + " " +
-           byte_to_hex_string(immediate_val) + " ";
+           byte_to_hex_string(upper_address_reg) + " ";
 }
 
 // format: opcode addr
@@ -313,9 +313,9 @@ std::string deserialize_instruction(const cpu::Opcode current_opcode,
     case cpu::Opcode::STIA:
         stream << std::left << std::setw(5) << opcode_string << std::left
                << std::setw(3) << deserialize_register(prog_rom[address + 1])
-               << " "
-               << deserialize_address_value(prog_rom[address + 2],
-                                            prog_rom[address + 3]);
+               << " " << deserialize_imm_value(prog_rom[address + 2]) << " "
+               << deserialize_address_value(prog_rom[address + 3],
+                                            prog_rom[address + 4]);
         return stream.str();
 
     case cpu::Opcode::CMP:
