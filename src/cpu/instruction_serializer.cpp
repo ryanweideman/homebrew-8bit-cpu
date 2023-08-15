@@ -244,11 +244,10 @@ std::string serialize_instruction(const std::vector<std::string> &symbols) {
                                 symbols[0]);
 }
 
-std::string deserialize_instruction(const cpu::Opcode current_opcode,
-                                    const uint16_t address,
-                                    const std::vector<uint8_t> &prog_rom) {
-    std::stringstream stream;
-
+std::vector<std::string>
+deserialize_instruction(const cpu::Opcode current_opcode,
+                        const uint16_t address,
+                        const std::vector<uint8_t> &prog_rom) {
     const std::string opcode_string =
         cpu::get_string_for_opcode(current_opcode);
     switch (current_opcode) {
@@ -264,9 +263,7 @@ std::string deserialize_instruction(const cpu::Opcode current_opcode,
     case cpu::Opcode::SHLC:
     case cpu::Opcode::LD:
     case cpu::Opcode::ST:
-        stream << std::left << std::setw(5) << opcode_string << std::left
-               << std::setw(3) << deserialize_register(prog_rom[address]);
-        return stream.str();
+        return {opcode_string, deserialize_register(prog_rom[address])};
 
     case cpu::Opcode::ADDI:
     case cpu::Opcode::SUBI:
@@ -276,10 +273,8 @@ std::string deserialize_instruction(const cpu::Opcode current_opcode,
     case cpu::Opcode::LDI:
     case cpu::Opcode::STI:
     case cpu::Opcode::OUT:
-        stream << std::left << std::setw(5) << opcode_string << std::left
-               << std::setw(3) << deserialize_register(prog_rom[address]) << " "
-               << deserialize_imm_value(prog_rom[address + 1]);
-        return stream.str();
+        return {opcode_string, deserialize_register(prog_rom[address]),
+                deserialize_imm_value(prog_rom[address + 1])};
 
     case cpu::Opcode::B:
     case cpu::Opcode::BC:
@@ -289,40 +284,32 @@ std::string deserialize_instruction(const cpu::Opcode current_opcode,
     case cpu::Opcode::BNE:
     case cpu::Opcode::BGT:
     case cpu::Opcode::BGTE:
-        stream << std::left << std::setw(5) << opcode_string << std::left
-               << std::setw(3)
-               << deserialize_address_value(prog_rom[address + 1],
-                                            prog_rom[address + 2]);
-        return stream.str();
+        return {opcode_string,
+                deserialize_address_value(prog_rom[address + 1],
+                                          prog_rom[address + 2])};
 
     case cpu::Opcode::MOVA:
     case cpu::Opcode::MOVB:
-        stream << std::left << std::setw(5) << opcode_string << std::left
-               << std::setw(3) << deserialize_register(prog_rom[address]) << " "
-               << deserialize_register(prog_rom[address + 1]);
-        return stream.str();
+        return {opcode_string, deserialize_register(prog_rom[address]),
+                deserialize_register(prog_rom[address + 1])};
 
     case cpu::Opcode::LDA:
     case cpu::Opcode::STA:
-        stream << std::left << std::setw(5) << opcode_string << std::left
-               << std::setw(3) << deserialize_register(prog_rom[address]) << " "
-               << deserialize_address_value(prog_rom[address + 1],
-                                            prog_rom[address + 2]);
-        return stream.str();
+        return {opcode_string, deserialize_register(prog_rom[address]),
+                deserialize_address_value(prog_rom[address + 1],
+                                          prog_rom[address + 2])};
 
     case cpu::Opcode::STIA:
-        stream << std::left << std::setw(5) << opcode_string << std::left
-               << std::setw(3) << deserialize_register(prog_rom[address + 1])
-               << " " << deserialize_imm_value(prog_rom[address + 2]) << " "
-               << deserialize_address_value(prog_rom[address + 3],
-                                            prog_rom[address + 4]);
-        return stream.str();
+        return {opcode_string, deserialize_register(prog_rom[address + 1]),
+                deserialize_imm_value(prog_rom[address + 2]),
+                deserialize_address_value(prog_rom[address + 3],
+                                          prog_rom[address + 4])};
 
     case cpu::Opcode::CMP:
     case cpu::Opcode::NOP:
     case cpu::Opcode::SETC:
     case cpu::Opcode::CLC:
-        return opcode_string;
+        return {opcode_string};
     }
 
     throw std::invalid_argument(

@@ -186,13 +186,20 @@ void render_instructions(const int row, const int col,
 
         std::stringstream stream;
         stream << std::setw(addr_width) << std::right
-               << static_cast<int>(current_opcode_address + current_offset);
+               << static_cast<int>(current_opcode_address + current_offset)
+               << " : ";
 
-        instructions.push_back(stream.str() + " : " +
-                               instruction_serializer::deserialize_instruction(
-                                   next_opcode,
-                                   current_opcode_address + current_offset,
-                                   prog_rom));
+        std::vector<std::string> deserialized_instructions =
+            instruction_serializer::deserialize_instruction(
+                next_opcode, current_opcode_address + current_offset, prog_rom);
+
+        stream << std::left << std::setw(4) << deserialized_instructions[0];
+        for (size_t i = 1; i < deserialized_instructions.size(); i++) {
+            stream << " " << std::left << std::setw(3)
+                   << deserialized_instructions.at(i);
+        }
+
+        instructions.push_back(stream.str());
     }
     render_text_box(row, col, instructions);
 }
