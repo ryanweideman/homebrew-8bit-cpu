@@ -222,3 +222,216 @@ TEST(InstructionSerializerTest, Serialize_out) {
             .c_str(),
         "90 01 ff ");
 }
+
+TEST(InstructionSerializerTest, Deserialize_add) {
+    std::vector<std::string> expected = {"add", "r1"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x01}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_addi) {
+    std::vector<std::string> expected = {"addi", "r1", "x05"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x05, 0x05}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_addc) {
+    std::vector<std::string> expected = {"addc", "r3"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x0b}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_sub) {
+    std::vector<std::string> expected = {"sub", "r3"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x0f}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_subi) {
+    std::vector<std::string> expected = {"subi", "r3", "xff"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x13, 0xff}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_subc) {
+    std::vector<std::string> expected = {"subc", "r2"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x16}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_not) {
+    std::vector<std::string> expected = {"not", "r1"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x19}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_and) {
+    std::vector<std::string> expected = {"and", "r1"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x1d}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_andi) {
+    std::vector<std::string> expected = {"andi", "r1", "xff"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x21, 0xff}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_or) {
+    std::vector<std::string> expected = {"or", "r2"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x26}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_ori) {
+    std::vector<std::string> expected = {"ori", "r2", "xff"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x2a, 0xff}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_xor) {
+    std::vector<std::string> expected = {"xor", "r2"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x2e}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_xori) {
+    std::vector<std::string> expected = {"xori", "r2", "xff"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x32, 0xff}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_shl) {
+    std::vector<std::string> expected = {"shl", "r3"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x37}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_shlc) {
+    std::vector<std::string> expected = {"shlc", "r3"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x3b}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_ldi) {
+    std::vector<std::string> expected = {"ldi", "r3", "x7f"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x3f, 0x7f}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_ld) {
+    std::vector<std::string> expected = {"ld", "r1"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x41}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_lda) {
+    std::vector<std::string> expected = {"lda", "r1", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x45, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_st) {
+    std::vector<std::string> expected = {"st", "r0"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x48}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_sta) {
+    std::vector<std::string> expected = {"sta", "r0", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x4c, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_stia) {
+    std::vector<std::string> expected = {"stia", "x7f", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x54, 0x7f, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_cmp) {
+    std::vector<std::string> expected = {"cmp"};
+    EXPECT_EQ(expected,
+              instruction_serializer::deserialize_instruction({0x58}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_b) {
+    std::vector<std::string> expected = {"b", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x5c, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_bc) {
+    std::vector<std::string> expected = {"bc", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x60, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_blt) {
+    std::vector<std::string> expected = {"blt", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x64, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_blte) {
+    std::vector<std::string> expected = {"blte", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x68, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_be) {
+    std::vector<std::string> expected = {"be", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x6c, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_bne) {
+    std::vector<std::string> expected = {"bne", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x70, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_bgt) {
+    std::vector<std::string> expected = {"bgt", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x74, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_bgte) {
+    std::vector<std::string> expected = {"bgte", "x03e8"};
+    EXPECT_EQ(expected, instruction_serializer::deserialize_instruction(
+                            {0x78, 0xe8, 0x03}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_mov) {
+    std::vector<std::string> expected1 = {"mov", "r0", "r2"};
+    EXPECT_EQ(expected1,
+              instruction_serializer::deserialize_instruction({0x7e}));
+    std::vector<std::string> expected2 = {"mov", "r1", "r2"};
+    EXPECT_EQ(expected2,
+              instruction_serializer::deserialize_instruction({0x82}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_nop) {
+    std::vector<std::string> expected1 = {"nop"};
+    EXPECT_EQ(expected1,
+              instruction_serializer::deserialize_instruction({0x84}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_setc) {
+    std::vector<std::string> expected1 = {"setc"};
+    EXPECT_EQ(expected1,
+              instruction_serializer::deserialize_instruction({0x88}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_clc) {
+    std::vector<std::string> expected1 = {"clc"};
+    EXPECT_EQ(expected1,
+              instruction_serializer::deserialize_instruction({0x8c}));
+}
+
+TEST(InstructionSerializerTest, Deserialize_out) {
+    std::vector<std::string> expected1 = {"out", "1", "xff"};
+    EXPECT_EQ(expected1, instruction_serializer::deserialize_instruction(
+                             {0x90, 0x01, 0xff}));
+}

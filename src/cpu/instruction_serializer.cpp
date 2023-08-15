@@ -252,7 +252,7 @@ std::vector<std::string>
 deserialize_instruction(const std::vector<uint8_t> bytes) {
 
     const cpu::Opcode opcode        = cpu::get_opcode_for_value(bytes[0] >> 2);
-    const std::string opcode_string = get_string_for_opcode(opcode);
+    const std::string opcode_string = cpu::get_string_for_opcode(opcode);
 
     switch (opcode) {
     case cpu::Opcode::ADD:
@@ -276,7 +276,6 @@ deserialize_instruction(const std::vector<uint8_t> bytes) {
     case cpu::Opcode::XORI:
     case cpu::Opcode::LDI:
     case cpu::Opcode::STI:
-    case cpu::Opcode::OUT:
         return {opcode_string, deserialize_register(bytes[0]),
                 deserialize_imm_value(bytes[1])};
 
@@ -291,9 +290,9 @@ deserialize_instruction(const std::vector<uint8_t> bytes) {
         return {opcode_string, deserialize_address_value(bytes[1], bytes[2])};
 
     case cpu::Opcode::MOVA:
+        return {opcode_string, "r0", deserialize_register(bytes[0])};
     case cpu::Opcode::MOVB:
-        return {opcode_string, deserialize_register(bytes[0]),
-                deserialize_register(bytes[1])};
+        return {opcode_string, "r1", deserialize_register(bytes[0])};
 
     case cpu::Opcode::LDA:
     case cpu::Opcode::STA:
@@ -301,8 +300,7 @@ deserialize_instruction(const std::vector<uint8_t> bytes) {
                 deserialize_address_value(bytes[1], bytes[2])};
 
     case cpu::Opcode::STIA:
-        return {opcode_string, deserialize_register(bytes[0]),
-                deserialize_imm_value(bytes[1]),
+        return {opcode_string, deserialize_imm_value(bytes[1]),
                 deserialize_address_value(bytes[2], bytes[3])};
 
     case cpu::Opcode::CMP:
@@ -310,6 +308,10 @@ deserialize_instruction(const std::vector<uint8_t> bytes) {
     case cpu::Opcode::SETC:
     case cpu::Opcode::CLC:
         return {opcode_string};
+
+    case cpu::Opcode::OUT:
+        return {opcode_string, std::to_string(bytes[1]),
+                deserialize_imm_value(bytes[2])};
     }
 
     throw std::invalid_argument(
