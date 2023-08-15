@@ -12,9 +12,9 @@ std::string
 serialize_instruction(const std::vector<std::string> &tokenized_instruction);
 
 std::vector<std::string>
-deserialize_instruction(const cpu::Opcode current_opcode,
-                        const uint16_t address,
-                        const std::vector<uint8_t> &prog_rom);
+deserialize_instruction(const std::vector<uint8_t> bytes);
+
+std::string deserialize_byte(const uint8_t rom_byte);
 
 } // namespace instruction_serializer
 

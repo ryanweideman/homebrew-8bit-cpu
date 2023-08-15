@@ -143,8 +143,12 @@ std::string deserialize_register(const uint8_t rom_byte) {
 }
 
 std::string deserialize_imm_value(const uint8_t rom_byte) {
+    return "x" + deserialize_byte(rom_byte);
+}
+
+std::string deserialize_byte(const uint8_t rom_byte) {
     std::stringstream stream;
-    stream << "x" << std::setfill('0') << std::setw(2) << std::right << std::hex
+    stream << std::setfill('0') << std::setw(2) << std::right << std::hex
            << static_cast<int>(rom_byte);
     return stream.str();
 }
@@ -245,12 +249,12 @@ std::string serialize_instruction(const std::vector<std::string> &symbols) {
 }
 
 std::vector<std::string>
-deserialize_instruction(const cpu::Opcode current_opcode,
-                        const uint16_t address,
-                        const std::vector<uint8_t> &prog_rom) {
-    const std::string opcode_string =
-        cpu::get_string_for_opcode(current_opcode);
-    switch (current_opcode) {
+deserialize_instruction(const std::vector<uint8_t> bytes) {
+
+    const cpu::Opcode opcode        = cpu::get_opcode_for_value(bytes[0] >> 2);
+    const std::string opcode_string = get_string_for_opcode(opcode);
+
+    switch (opcode) {
     case cpu::Opcode::ADD:
     case cpu::Opcode::SUB:
     case cpu::Opcode::ADDC:
@@ -263,7 +267,7 @@ deserialize_instruction(const cpu::Opcode current_opcode,
     case cpu::Opcode::SHLC:
     case cpu::Opcode::LD:
     case cpu::Opcode::ST:
-        return {opcode_string, deserialize_register(prog_rom[address])};
+        return {opcode_string, deserialize_register(bytes[0])};
 
     case cpu::Opcode::ADDI:
     case cpu::Opcode::SUBI:
@@ -273,8 +277,8 @@ deserialize_instruction(const cpu::Opcode current_opcode,
     case cpu::Opcode::LDI:
     case cpu::Opcode::STI:
     case cpu::Opcode::OUT:
-        return {opcode_string, deserialize_register(prog_rom[address]),
-                deserialize_imm_value(prog_rom[address + 1])};
+        return {opcode_string, deserialize_register(bytes[0]),
+                deserialize_imm_value(bytes[1])};
 
     case cpu::Opcode::B:
     case cpu::Opcode::BC:
@@ -284,26 +288,22 @@ deserialize_instruction(const cpu::Opcode current_opcode,
     case cpu::Opcode::BNE:
     case cpu::Opcode::BGT:
     case cpu::Opcode::BGTE:
-        return {opcode_string,
-                deserialize_address_value(prog_rom[address + 1],
-                                          prog_rom[address + 2])};
+        return {opcode_string, deserialize_address_value(bytes[1], bytes[2])};
 
     case cpu::Opcode::MOVA:
     case cpu::Opcode::MOVB:
-        return {opcode_string, deserialize_register(prog_rom[address]),
-                deserialize_register(prog_rom[address + 1])};
+        return {opcode_string, deserialize_register(bytes[0]),
+                deserialize_register(bytes[1])};
 
     case cpu::Opcode::LDA:
     case cpu::Opcode::STA:
-        return {opcode_string, deserialize_register(prog_rom[address]),
-                deserialize_address_value(prog_rom[address + 1],
-                                          prog_rom[address + 2])};
+        return {opcode_string, deserialize_register(bytes[0]),
+                deserialize_address_value(bytes[1], bytes[2])};
 
     case cpu::Opcode::STIA:
-        return {opcode_string, deserialize_register(prog_rom[address + 1]),
-                deserialize_imm_value(prog_rom[address + 2]),
-                deserialize_address_value(prog_rom[address + 3],
-                                          prog_rom[address + 4])};
+        return {opcode_string, deserialize_register(bytes[0]),
+                deserialize_imm_value(bytes[1]),
+                deserialize_address_value(bytes[2], bytes[3])};
 
     case cpu::Opcode::CMP:
     case cpu::Opcode::NOP:

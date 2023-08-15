@@ -169,29 +169,22 @@ void render_instructions(const int row, const int col,
         addr_width = 5;
     }
 
-    std::stringstream stream;
-    stream << std::setw(addr_width) << std::right
-           << static_cast<int>(current_opcode_address);
-
-    instructions.push_back(stream.str() + " : \x1b[48;5;32m" +
-                           cpu::get_string_for_opcode(next_opcode) + "\x1b[0m");
-    uint16_t current_offset = 0;
+    uint16_t address = current_opcode_address;
     for (int i = 0; i < 10; i++) {
-        current_offset += get_num_bytes_for_instruction(next_opcode);
-        if (current_opcode_address + current_offset >= prog_rom.size()) {
-            break;
-        }
-        next_opcode = cpu::get_opcode_for_value(
-            prog_rom[current_opcode_address + current_offset] >> 2);
 
         std::stringstream stream;
         stream << std::setw(addr_width) << std::right
-               << static_cast<int>(current_opcode_address + current_offset)
-               << " : ";
+               << static_cast<int>(address) << " : ";
 
+        int num_bytes_for_instruction =
+            get_num_bytes_for_instruction(next_opcode);
+
+        std::vector<uint8_t> instruction_bytes;
+        for (uint16_t j = 0; j < num_bytes_for_instruction; j++) {
+            instruction_bytes.push_back(prog_rom[address + j]);
+        }
         std::vector<std::string> deserialized_instructions =
-            instruction_serializer::deserialize_instruction(
-                next_opcode, current_opcode_address + current_offset, prog_rom);
+            instruction_serializer::deserialize_instruction(instruction_bytes);
 
         stream << std::left << std::setw(4) << deserialized_instructions[0];
         for (size_t i = 1; i < deserialized_instructions.size(); i++) {
@@ -199,7 +192,15 @@ void render_instructions(const int row, const int col,
                    << deserialized_instructions.at(i);
         }
 
-        instructions.push_back(stream.str());
+        instructions.push_back(
+            i == 0 ? ("\x1b[48;5;32m" + stream.str() + "\x1b[0m")
+                   : stream.str());
+
+        address += num_bytes_for_instruction;
+        if (address >= prog_rom.size()) {
+            break;
+        }
+        next_opcode = cpu::get_opcode_for_value(prog_rom[address] >> 2);
     }
     render_text_box(row, col, instructions);
 }
