@@ -4,8 +4,6 @@ add_library(
     emulator.cpp 
     microcode_executor.h 
     microcode_executor.cpp 
-    state.h 
-    state.cpp 
     renderer.h 
     renderer.cpp) 
 target_link_libraries(emulator decoder cpu)

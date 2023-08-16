@@ -1,7 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "state.h"
+#include <cpu/state.h>
 
 namespace renderer {
 void render(const State previous_state, const State current_state,

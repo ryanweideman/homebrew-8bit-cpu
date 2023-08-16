@@ -5,9 +5,9 @@
 #include <string>
 
 #include <cpu/cpu.h>
+#include <cpu/state.h>
 
 #include "microcode_executor.h"
-#include "state.h"
 
 namespace microcode_executor {
 

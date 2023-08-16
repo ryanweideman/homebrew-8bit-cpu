@@ -6,12 +6,12 @@
 #include <vector>
 
 #include <cpu/cpu.h>
+#include <cpu/state.h>
 #include <decoder/decoder.h>
 
 #include "emulator.h"
 #include "microcode_executor.h"
 #include "renderer.h"
-#include "state.h"
 
 Emulator::Emulator(const State initial_state, const ProgramRom &prog_rom,
                    const DecoderRom &decoder_rom)

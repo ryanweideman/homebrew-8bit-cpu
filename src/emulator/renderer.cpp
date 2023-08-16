@@ -4,6 +4,7 @@
 
 #include <cpu/cpu.h>
 #include <cpu/instruction_serializer.h>
+#include <cpu/state.h>
 
 #include "renderer.h"
 

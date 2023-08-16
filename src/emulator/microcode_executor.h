@@ -1,7 +1,7 @@
 #ifndef MICROCODE_EXECUTOR_H
 #define MICROCODE_EXECUTOR_H
 
-#include "state.h"
+#include <cpu/state.h>
 
 namespace microcode_executor {
 

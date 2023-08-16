@@ -1,7 +1,7 @@
 #ifndef EMULATOR_H
 #define EMULATOR_H
 
-#include "state.h"
+#include <cpu/state.h>
 
 typedef std::array<uint16_t, cpu::DECODER_SIZE> DecoderRom;
 typedef std::vector<uint8_t> ProgramRom;
