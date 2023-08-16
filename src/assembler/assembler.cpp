@@ -1,6 +1,8 @@
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -33,11 +35,14 @@ std::vector<std::string> read_file(const std::string input_file_name) {
 }
 
 void write_output_hex_file(const std::string output_file_name,
-                           const std::vector<std::string> &bytes) {
+                           const std::vector<uint8_t> &bytes) {
     std::ofstream out_file;
     out_file.open(output_file_name);
-    for (const std::string b : bytes) {
-        out_file << b;
+    for (const uint8_t b : bytes) {
+        std::stringstream stream;
+        stream << std::setfill('0') << std::setw(2) << std::right << std::hex
+               << static_cast<int>(b);
+        out_file << stream.str() + " ";
     }
     out_file.close();
 }
@@ -169,10 +174,10 @@ FirstPassResult first_pass(const std::vector<std::string> &input_lines) {
     return first_pass_result;
 }
 
-std::vector<std::string>
+std::vector<uint8_t>
 second_pass(const std::vector<std::vector<std::string>> &symbol_table,
             const DefineTable &define_table, const LabelTable &label_table) {
-    std::vector<std::string> bytes;
+    std::vector<uint8_t> bytes;
     for (const std::vector<std::string> &symbols : symbol_table) {
         // Use the label table and define table to translate symbols if needed
         std::vector<std::string> translated_symbols;
@@ -187,13 +192,16 @@ second_pass(const std::vector<std::vector<std::string>> &symbol_table,
             }
         }
 
-        bytes.push_back(
-            instruction_serializer::serialize_instruction(translated_symbols));
+        const std::vector<uint8_t> serialized_bytes =
+            instruction_serializer::serialize_instruction(translated_symbols);
+        for (const uint8_t b : serialized_bytes) {
+            bytes.push_back(b);
+        }
     }
     return bytes;
 }
 
-std::vector<std::string> assemble(const std::vector<std::string> &file_lines) {
+std::vector<uint8_t> assemble(const std::vector<std::string> &file_lines) {
     FirstPassResult first_pass_result = first_pass(file_lines);
     return second_pass(first_pass_result.symbol_table,
                        first_pass_result.define_table,

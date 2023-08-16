@@ -2,225 +2,256 @@
 
 #include <cpu/instruction_serializer.h>
 
+using std::vector;
+
 TEST(InstructionSerializerTest, Serialize_add) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"add", "r1"}).c_str(),
-        "01 ");
+    vector<uint8_t> expected = {0x01};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"add", "r1"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_addi) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"addi", "r1", "5"})
-            .c_str(),
-        "05 05 ");
+    vector<uint8_t> expected = {0x05, 0x05};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"addi", "r1", "5"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_addc) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"addc", "r3"}).c_str(),
-        "0b ");
+    vector<uint8_t> expected = {0x0b};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"addc", "r3"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_sub) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"sub", "r3"}).c_str(),
-        "0f ");
+    vector<uint8_t> expected = {0x0f};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"sub", "r3"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_subi) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"subi", "r3", "255"})
-            .c_str(),
-        "13 ff ");
+    vector<uint8_t> expected = {0x13, 0xff};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"subi", "r3", "255"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_subc) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"subc", "r2"}).c_str(),
-        "16 ");
+    vector<uint8_t> expected = {0x16};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"subc", "r2"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_not) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"not", "r1"}).c_str(),
-        "19 ");
+    vector<uint8_t> expected = {0x19};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"not", "r1"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_and) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"and", "r1"}).c_str(),
-        "1d ");
+    vector<uint8_t> expected = {0x1d};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"and", "r1"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_andi) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"andi", "r1", "255"})
-            .c_str(),
-        "21 ff ");
+    vector<uint8_t> expected = {0x21, 0xff};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"andi", "r1", "255"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_or) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"or", "r2"}).c_str(),
-        "26 ");
+    vector<uint8_t> expected = {0x26};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"or", "r2"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_ori) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"ori", "r2", "255"})
-            .c_str(),
-        "2a ff ");
+    vector<uint8_t> expected = {0x2a, 0xff};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"ori", "r2", "255"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_xor) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"xor", "r2"}).c_str(),
-        "2e ");
+    vector<uint8_t> expected = {0x2e};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"xor", "r2"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_xori) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"xori", "r2", "255"})
-            .c_str(),
-        "32 ff ");
+    vector<uint8_t> expected = {0x32, 0xff};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"xori", "r2", "255"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_shl) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"shl", "r3"}).c_str(),
-        "37 ");
+    vector<uint8_t> expected = {0x37};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"shl", "r3"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_shlc) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"shlc", "r3"}).c_str(),
-        "3b ");
+    vector<uint8_t> expected = {0x3b};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"shlc", "r3"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_ldi) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"ldi", "r3", "127"})
-            .c_str(),
-        "3f 7f ");
+    vector<uint8_t> expected = {0x3f, 0x7f};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"ldi", "r3", "127"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_ld) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"ld", "r1"}).c_str(),
-        "41 ");
+    vector<uint8_t> expected = {0x41};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"ld", "r1"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_lda) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"lda", "r1", "1000"})
-            .c_str(),
-        "45 e8 03 ");
+    vector<uint8_t> expected = {0x45, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"lda", "r1", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_st) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"st", "r0"}).c_str(),
-        "48 ");
+    vector<uint8_t> expected = {0x48};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"st", "r0"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_sta) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"sta", "r0", "1000"})
-            .c_str(),
-        "4c e8 03 ");
+    vector<uint8_t> expected = {0x4c, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"sta", "r0", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_stia) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"stia", "127", "1000"})
-            .c_str(),
-        "54 7f e8 03 ");
+    vector<uint8_t> expected = {0x54, 0x7f, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"stia", "127", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_cmp) {
-    EXPECT_STREQ(instruction_serializer::serialize_instruction({"cmp"}).c_str(),
-                 "58 ");
+    vector<uint8_t> expected = {0x58};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"cmp"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_b) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"b", "1000"}).c_str(),
-        "5c e8 03 ");
+    vector<uint8_t> expected = {0x5c, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"b", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_bc) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"bc", "1000"}).c_str(),
-        "60 e8 03 ");
+    vector<uint8_t> expected = {0x60, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"bc", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_blt) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"blt", "1000"}).c_str(),
-        "64 e8 03 ");
+    vector<uint8_t> expected = {0x64, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"blt", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_blte) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"blte", "1000"}).c_str(),
-        "68 e8 03 ");
+    vector<uint8_t> expected = {0x68, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"blte", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_be) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"be", "1000"}).c_str(),
-        "6c e8 03 ");
+    vector<uint8_t> expected = {0x6c, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"be", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_bne) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"bne", "1000"}).c_str(),
-        "70 e8 03 ");
+    vector<uint8_t> expected = {0x70, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"bne", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_bgt) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"bgt", "1000"}).c_str(),
-        "74 e8 03 ");
+    vector<uint8_t> expected = {0x74, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"bgt", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_bgte) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"bgte", "1000"}).c_str(),
-        "78 e8 03 ");
+    vector<uint8_t> expected = {0x78, 0xe8, 0x03};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"bgte", "1000"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_mov) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"mov", "r0", "r2"})
-            .c_str(),
-        "7e ");
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"mov", "r1", "r2"})
-            .c_str(),
-        "82 ");
+    vector<uint8_t> expected_mova = {0x7e};
+    vector<uint8_t> actual_mova =
+        instruction_serializer::serialize_instruction({"mov", "r0", "r2"});
+    EXPECT_EQ(expected_mova, actual_mova);
+
+    vector<uint8_t> expected_movb = {0x82};
+    vector<uint8_t> actual_movb =
+        instruction_serializer::serialize_instruction({"mov", "r1", "r2"});
+    EXPECT_EQ(expected_movb[0], actual_movb[0]);
 }
 
 TEST(InstructionSerializerTest, Serialize_nop) {
-    EXPECT_STREQ(instruction_serializer::serialize_instruction({"nop"}).c_str(),
-                 "84 ");
+    vector<uint8_t> expected = {0x84};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"nop"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_setc) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"setc"}).c_str(), "88 ");
+    vector<uint8_t> expected = {0x88};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"setc"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_clc) {
-    EXPECT_STREQ(instruction_serializer::serialize_instruction({"clc"}).c_str(),
-                 "8c ");
+    vector<uint8_t> expected = {0x8c};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"clc"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Serialize_out) {
-    EXPECT_STREQ(
-        instruction_serializer::serialize_instruction({"out", "1", "255"})
-            .c_str(),
-        "90 01 ff ");
+    vector<uint8_t> expected = {0x90, 0x01, 0xff};
+    vector<uint8_t> actual =
+        instruction_serializer::serialize_instruction({"out", "1", "255"});
+    EXPECT_EQ(expected, actual);
 }
 
 TEST(InstructionSerializerTest, Deserialize_add) {

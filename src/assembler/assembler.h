@@ -14,8 +14,8 @@ struct FirstPassResult {
 
 std::vector<std::string> read_file(const std::string input_file_name);
 void write_output_hex_file(const std::string output_file_name,
-                           const std::vector<std::string> &bytes);
+                           const std::vector<uint8_t> &bytes);
 
-std::vector<std::string> assemble(const std::vector<std::string> &lines);
+std::vector<uint8_t> assemble(const std::vector<std::string> &lines);
 
 #endif

@@ -8,7 +8,7 @@
 
 namespace instruction_serializer {
 
-std::string
+std::vector<uint8_t>
 serialize_instruction(const std::vector<std::string> &tokenized_instruction);
 
 std::vector<std::string>

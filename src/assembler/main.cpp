@@ -9,11 +9,11 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    std::string input_file_name  = argv[1];
-    std::string output_file_name = argv[2];
+    const std::string input_file_name  = argv[1];
+    const std::string output_file_name = argv[2];
 
-    std::vector<std::string> file_lines = read_file(input_file_name);
-    std::vector<std::string> bytes      = assemble(file_lines);
+    const std::vector<std::string> file_lines = read_file(input_file_name);
+    const std::vector<uint8_t> bytes          = assemble(file_lines);
 
     write_output_hex_file(output_file_name, bytes);
 

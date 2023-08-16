@@ -6,6 +6,8 @@
 
 namespace instruction_serializer {
 
+using std::vector;
+
 std::string byte_to_hex_string(const uint8_t val) {
     std::stringstream stream;
     stream << std::setfill('0') << std::setw(2) << std::right << std::hex
@@ -18,35 +20,34 @@ uint8_t serialize_register_string(const std::string &reg) {
 }
 
 // format: opcode
-std::string serialize_basic_instruction(const uint8_t opcode) {
+vector<uint8_t> serialize_basic_instruction(const uint8_t opcode) {
     const uint8_t instruction_reg = opcode << 2;
-    return byte_to_hex_string(instruction_reg) + " ";
+    return {instruction_reg};
 }
 
 // format: opcode rd imm
-std::string
+vector<uint8_t>
 serialize_imm_type_instruction(const uint8_t opcode,
                                const std::vector<std::string> &tokens) {
     const uint8_t destination_reg = serialize_register_string(tokens[1]);
     const uint8_t immediate_val   = std::stoi(tokens[2]);
     const uint8_t instruction_reg = (opcode << 2) | destination_reg;
 
-    return byte_to_hex_string(instruction_reg) + " " +
-           byte_to_hex_string(immediate_val) + " ";
+    return {instruction_reg, immediate_val};
 }
 
 // format: opcode rd
-std::string
+vector<uint8_t>
 serialize_reg_type_instruction(const uint8_t opcode,
                                const std::vector<std::string> &tokens) {
     const uint8_t destination_reg = serialize_register_string(tokens[1]);
     const uint8_t instruction_reg = (opcode << 2) | destination_reg;
 
-    return byte_to_hex_string(instruction_reg) + " ";
+    return {instruction_reg};
 }
 
 // format: opcode rd address
-std::string serialize_load_address_type_instruction(
+vector<uint8_t> serialize_load_address_type_instruction(
     const uint8_t opcode, const std::vector<std::string> &tokens) {
     const uint8_t destination_reg   = serialize_register_string(tokens[1]);
     const uint16_t address          = std::stoi(tokens[2]);
@@ -54,13 +55,11 @@ std::string serialize_load_address_type_instruction(
     const uint8_t upper_address_reg = (address >> 8) & 0xFF;
     const uint8_t instruction_reg   = (opcode << 2) | destination_reg;
 
-    return byte_to_hex_string(instruction_reg) + " " +
-           byte_to_hex_string(lower_address_reg) + " " +
-           byte_to_hex_string(upper_address_reg) + " ";
+    return {instruction_reg, lower_address_reg, upper_address_reg};
 }
 
 // format: opcode rs address
-std::string serialize_store_address_type_instruction(
+vector<uint8_t> serialize_store_address_type_instruction(
     const uint8_t opcode, const std::vector<std::string> &tokens) {
     const uint8_t source_reg = serialize_register_string(tokens[1]);
 
@@ -74,13 +73,11 @@ std::string serialize_store_address_type_instruction(
     const uint8_t upper_address_reg = (address >> 8) & 0xFF;
     const uint8_t instruction_reg   = (opcode << 2) | source_reg;
 
-    return byte_to_hex_string(instruction_reg) + " " +
-           byte_to_hex_string(lower_address_reg) + " " +
-           byte_to_hex_string(upper_address_reg) + " ";
+    return {instruction_reg, lower_address_reg, upper_address_reg};
 }
 
 // format opcode address imm
-std::string serialize_store_imm_address_type_instruction(
+vector<uint8_t> serialize_store_imm_address_type_instruction(
     const uint8_t opcode, const std::vector<std::string> &tokens) {
     const uint8_t immediate_val     = std::stoi(tokens[1]);
     const uint16_t address          = std::stoi(tokens[2]);
@@ -88,27 +85,23 @@ std::string serialize_store_imm_address_type_instruction(
     const uint8_t upper_address_reg = (address >> 8) & 0xFF;
     const uint8_t instruction_reg   = opcode << 2;
 
-    return byte_to_hex_string(instruction_reg) + " " +
-           byte_to_hex_string(immediate_val) + " " +
-           byte_to_hex_string(lower_address_reg) + " " +
-           byte_to_hex_string(upper_address_reg) + " ";
+    return {instruction_reg, immediate_val, lower_address_reg,
+            upper_address_reg};
 }
 
 // format: opcode addr
-std::string
+vector<uint8_t>
 serialize_branch_type_instruction(const uint8_t opcode,
                                   const std::vector<std::string> &tokens) {
     const uint8_t instruction_reg   = opcode << 2;
     const uint16_t address          = std::stoi(tokens[1]);
     const uint8_t lower_address_reg = address & 0xFF;
     const uint8_t upper_address_reg = (address >> 8) & 0xFF;
-    return byte_to_hex_string(instruction_reg) + " " +
-           byte_to_hex_string(lower_address_reg) + " " +
-           byte_to_hex_string(upper_address_reg) + " ";
+    return {instruction_reg, lower_address_reg, upper_address_reg};
 }
 
 // format: opcode rs rd
-std::string
+vector<uint8_t>
 serialize_move_type_instruction(const std::vector<std::string> &tokens) {
     const uint8_t source_reg      = std::stoi(tokens[1].substr(1, 1));
     const uint8_t destination_reg = std::stoi(tokens[2].substr(1, 1));
@@ -125,17 +118,17 @@ serialize_move_type_instruction(const std::vector<std::string> &tokens) {
         instruction_reg = (cpu::M_MOVB << 2) | destination_reg;
     }
 
-    return byte_to_hex_string(instruction_reg) + " ";
+    return {instruction_reg};
 }
 
-std::string serialize_out_instruction(const uint8_t opcode,
-                                      const std::vector<std::string> &tokens) {
+vector<uint8_t>
+serialize_out_instruction(const uint8_t opcode,
+                          const std::vector<std::string> &tokens) {
     const uint8_t port            = std::stoi(tokens[1]);
     const uint8_t data            = std::stoi(tokens[2]);
     const uint8_t instruction_reg = (opcode << 2);
 
-    return byte_to_hex_string(instruction_reg) + " " +
-           byte_to_hex_string(port) + " " + byte_to_hex_string(data) + " ";
+    return {instruction_reg, port, data};
 }
 
 std::string deserialize_register(const uint8_t rom_byte) {
@@ -162,7 +155,7 @@ std::string deserialize_address_value(const uint8_t lower_byte,
     return stream.str();
 }
 
-std::string serialize_instruction(const std::vector<std::string> &symbols) {
+vector<uint8_t> serialize_instruction(const vector<std::string> &symbols) {
 
     const cpu::Opcode opcode = cpu::get_opcode_of_instruction(symbols);
 
