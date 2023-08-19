@@ -12,6 +12,9 @@ class Emulator {
              const DecoderRom &decoder_rom);
 
     void advance_one_clock_edge();
+    void advance_one_microcode_instruction();
+    void advance_one_instruction();
+    void advance_n_instructions(int n);
 
     State get_current_state();
     State get_previous_state();

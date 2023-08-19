@@ -16,8 +16,9 @@
 Emulator::Emulator(const State initial_state, const ProgramRom &prog_rom,
                    const DecoderRom &decoder_rom)
     : current_state_(initial_state), prog_rom_(prog_rom),
-      decoder_rom_(decoder_rom), clock_(0), total_number_clock_cycles_(0),
+      decoder_rom_(decoder_rom), total_number_clock_cycles_(0),
       total_number_instructions_(0) {
+    clock_ = 1;
     current_opcode_ =
         cpu::get_opcode_for_value(prog_rom[initial_state.program_counter] >> 2);
     current_opcode_address_ = initial_state.program_counter;
@@ -31,11 +32,43 @@ void Emulator::advance_one_clock_edge() {
         current_state_, clock_, prog_rom_, decoder_rom_);
 
     total_number_clock_cycles_ += clock_ == 1 ? 1 : 0;
-    if (current_state_.microcode_counter == 0 && clock_ == 0) {
+    if (current_state_.microcode_counter == 0 && clock_ == 1) {
         total_number_instructions_++;
         current_opcode_ = cpu::get_opcode_for_value(
             prog_rom_[current_state_.program_counter] >> 2);
         current_opcode_address_ = current_state_.program_counter;
+    }
+}
+
+void Emulator::advance_one_microcode_instruction() {
+    if (clock_ != 1) {
+        throw std::logic_error(
+            "Microcode execution always starts with clock high");
+    }
+    // falling edge
+    advance_one_clock_edge();
+    // rising edge
+    advance_one_clock_edge();
+}
+
+void Emulator::advance_one_instruction() {
+    if (current_state_.microcode_counter != 0) {
+        throw std::logic_error("Current microcode counter must be zero to "
+                               "advance one full instruction");
+    }
+    advance_one_microcode_instruction();
+    while (current_state_.microcode_counter != 0) {
+        advance_one_microcode_instruction();
+    }
+}
+
+void Emulator::advance_n_instructions(int n) {
+    if (current_state_.microcode_counter != 0) {
+        throw std::logic_error("Current microcode counter must be zero to "
+                               "advance one full instruction");
+    }
+    for (int i = 0; i < n; i++) {
+        advance_one_instruction();
     }
 }
 

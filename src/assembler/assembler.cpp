@@ -17,6 +17,8 @@
 #include "macro_generator.h"
 #include "tokenizer.h"
 
+namespace assembler {
+
 std::vector<std::string> read_file(const std::string input_file_name) {
     std::ifstream in_file;
     in_file.open(input_file_name);
@@ -207,3 +209,5 @@ std::vector<uint8_t> assemble(const std::vector<std::string> &file_lines) {
                        first_pass_result.define_table,
                        first_pass_result.label_table);
 }
+
+} // namespace assembler

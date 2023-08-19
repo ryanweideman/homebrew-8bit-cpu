@@ -259,7 +259,7 @@ std::array<uint16_t, cpu::DECODER_SIZE> generate_decode_logic() {
                     break;
 
                 case cpu::Opcode::NOP:
-                    microcode.push_back(cpu::U_NOP | reg_en(reg));
+                    microcode.push_back(cpu::U_NOP);
                     break;
 
                 case cpu::Opcode::SETC:
