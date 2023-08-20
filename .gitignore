@@ -1,9 +1,12 @@
-build/
-
+# Ignore executables
 assembler
-!assembler/
-
-decoder_generator
-
+decoder
 emulator
+
+# Ignore test executables
+cpu_tests
+integration_tests
+
+# Don't ignore directory contents with same name as executables
+!assembler/
 !emulator/
