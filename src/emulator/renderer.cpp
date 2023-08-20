@@ -66,8 +66,6 @@ void render_registers(const int row, const int col, const State previous_state,
                       const State current_state) {
     const std::string inst_reg_string =
         "instruction : " + std::to_string(current_state.instruction_register);
-    const std::string flag_reg_string =
-        "flags : " + std::to_string(current_state.flag_register);
     const std::string upper_reg_string =
         "upper : " + std::to_string(current_state.upper_register);
     const std::string lower_reg_string =
@@ -84,9 +82,6 @@ void render_registers(const int row, const int col, const State previous_state,
                  previous_state.instruction_register
              ? highlight_string(inst_reg_string)
              : inst_reg_string,
-         current_state.flag_register != previous_state.flag_register
-             ? highlight_string(flag_reg_string)
-             : flag_reg_string,
          current_state.upper_register != previous_state.upper_register
              ? highlight_string(upper_reg_string)
              : upper_reg_string,
@@ -99,6 +94,29 @@ void render_registers(const int row, const int col, const State previous_state,
          current_state.b_register != previous_state.b_register
              ? highlight_string(b_reg_string)
              : b_reg_string});
+}
+
+void render_flags(const int row, const int col, const State previous_state,
+                  const State current_state) {
+
+    const uint8_t current_carry  = current_state.flag_register & 1;
+    const uint8_t previous_carry = previous_state.flag_register & 1;
+
+    const uint8_t current_zero  = (current_state.flag_register >> 1) & 1;
+    const uint8_t previous_zero = (previous_state.flag_register >> 1) & 1;
+
+    const std::string carry_string =
+        "carry : " + std::to_string(current_carry == 0 ? 1 : 0);
+
+    const std::string zero_string = "zero : " + std::to_string(current_zero);
+
+    render_text_box(
+        row, col,
+        {"~~~ flags ~~~",
+         current_carry != previous_carry ? highlight_string(carry_string)
+                                         : carry_string,
+         current_zero != previous_zero ? highlight_string(zero_string)
+                                       : zero_string});
 }
 
 void render_ports(const int row, const int col, const State previous_state,
@@ -171,7 +189,7 @@ void render_instructions(const int row, const int col,
     }
 
     uint16_t address = current_opcode_address;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 12; i++) {
 
         std::stringstream stream;
         stream << std::setw(addr_width) << std::right
@@ -213,15 +231,16 @@ void render_footer(const int row, const int col, const float cpi,
     std::stringstream stream;
     stream << std::fixed << std::setprecision(2) << cpi;
     std::string cpi_string = stream.str();
-    render_text_box(row, col,
-                    {
-                        "CPI : " + cpi_string,
-                        "total_number_clock_cycles : " +
-                            std::to_string(total_number_clock_cycles),
-                        "total_number_instructions : " +
-                            std::to_string(total_number_instructions),
-                        "program_size : " + std::to_string(prog_rom_size),
-                    });
+    render_text_box(
+        row, col,
+        {
+            "CPI : " + cpi_string,
+            "total_number_clock_cycles : " +
+                std::to_string(total_number_clock_cycles),
+            "total_number_instructions : " +
+                std::to_string(total_number_instructions),
+            "program_size : " + std::to_string(prog_rom_size) + " bytes",
+        });
 }
 
 void render(const State previous_state, const State current_state,
@@ -234,20 +253,20 @@ void render(const State previous_state, const State current_state,
     reset_screen();
     hide_cursor();
 
-    render_text_box(1, 0, {"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"});
-    render_text_box(2, 0, {"~~~~~~~~~~~~~~~~~ EMULATOR ~~~~~~~~~~~~~~~~~"});
-    render_text_box(3, 0, {"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"});
+    render_text_box(2, 0,
+                    {"~~~~~~~~~~~~~~~~~~~~ EMULATOR ~~~~~~~~~~~~~~~~~~~~"});
 
-    render_instructions(5, 2, current_opcode, current_opcode_address, prog_rom);
+    render_instructions(4, 2, current_opcode, current_opcode_address, prog_rom);
     render_microcode(18, 2, current_state, decoder_rom);
 
-    render_clock(5, 30, clock);
-    render_counters(8, 30, previous_state, current_state);
-    render_registers(12, 30, previous_state, current_state);
-    render_ports(20, 30, previous_state, current_state);
+    render_clock(4, 30, clock);
+    render_counters(7, 30, previous_state, current_state);
+    render_registers(11, 30, previous_state, current_state);
+    render_flags(18, 30, previous_state, current_state);
+    render_ports(22, 30, previous_state, current_state);
 
-    render_text_box(24, 0, {"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"});
-    render_footer(25, 0, cpi, total_number_clock_cycles,
+    render_text_box(26, 0, {"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"});
+    render_footer(27, 0, cpi, total_number_clock_cycles,
                   total_number_instructions, static_cast<int>(prog_rom.size()));
 }
 } // namespace renderer

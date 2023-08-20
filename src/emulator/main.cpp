@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     State initial_state;
     Emulator emulator(initial_state, prog_rom, decoder_rom);
 
-    for (int step = 0; step < 1000; step++) {
+    for (int step = 0; step < 100000; step++) {
         usleep(100000);
 
         emulator.advance_one_clock_edge();
