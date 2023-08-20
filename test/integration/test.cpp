@@ -6,9 +6,15 @@
 #include <emulator/emulator.h>
 
 TEST(IntegrationTest, Basic) {
-
-    const ProgramRom prog_rom = assembler::assemble(
-        {"start:", "  ldi r0 5", "  ldi r1 7", "  nop", "end:", "  b end"});
+    // clang-format off
+    const ProgramRom prog_rom = assembler::assemble({
+        "start:", 
+        "  ldi A 5", 
+        "  ldi B 7", 
+        "  nop", 
+        "end:", 
+        "  b end"});
+    // clang-format on
     const ProgramRom expected_rom = {0x3c, 0x05, 0x3d, 0x07,
                                      0x84, 0x5c, 0x05, 0x00};
     ASSERT_EQ(prog_rom, expected_rom);
@@ -71,10 +77,16 @@ TEST(IntegrationTest, Basic) {
 }
 
 TEST(IntegrationTest, Add_carry) {
-
+    // clang-format off
     const ProgramRom prog_rom =
-        assembler::assemble({"ldi r0 128", "ldi r1 128", "add r0", "ldi r0 30",
-                             "ldi r1 7", "addc r0"});
+        assembler::assemble({
+            "ldi A 128", 
+            "ldi B 128", 
+            "add A", 
+            "ldi A 30",
+            "ldi B 7", 
+            "addc A"});
+    // clang-format on
 
     const DecoderRom decoder_rom = decoder::generate_decode_logic();
 

@@ -16,7 +16,16 @@ std::string byte_to_hex_string(const uint8_t val) {
 }
 
 uint8_t serialize_register_string(const std::string &reg) {
-    return std::stoi(reg.substr(1, 1));
+    if (reg == "A") {
+        return 0;
+    } else if (reg == "B") {
+        return 1;
+    } else if (reg == "L") {
+        return 2;
+    } else if (reg == "U") {
+        return 3;
+    }
+    throw std::invalid_argument("Unsupported register string: " + reg);
 }
 
 // format: opcode
@@ -103,8 +112,8 @@ serialize_branch_type_instruction(const uint8_t opcode,
 // format: opcode rs rd
 vector<uint8_t>
 serialize_move_type_instruction(const std::vector<std::string> &tokens) {
-    const uint8_t source_reg      = std::stoi(tokens[1].substr(1, 1));
-    const uint8_t destination_reg = std::stoi(tokens[2].substr(1, 1));
+    const uint8_t source_reg      = serialize_register_string(tokens[1]);
+    const uint8_t destination_reg = serialize_register_string(tokens[2]);
 
     if (source_reg > 1) {
         throw std::invalid_argument("Cannot mov source register " +
@@ -132,7 +141,16 @@ serialize_out_instruction(const uint8_t opcode,
 }
 
 std::string deserialize_register(const uint8_t rom_byte) {
-    return "r" + std::to_string(rom_byte & 0x03);
+    uint8_t reg = rom_byte & 0x03;
+    if (reg == 0) {
+        return "A";
+    } else if (reg == 1) {
+        return "B";
+    } else if (reg == 2) {
+        return "L";
+    } else {
+        return "U";
+    }
 }
 
 std::string deserialize_imm_value(const uint8_t rom_byte) {

@@ -1,17 +1,17 @@
 	# this is a comment
 start:
-	ldi r0 0
+	ldi A 0
 
 sum:
-	ldi r1 1
-	add r0
-	mov r0 r2
-	ldi r3 0
-	st r0
-	ldi r0 255
-	ld r0
+	ldi B 1
+	add A
+	mov A L
+	ldi U 0
+	st  A
+	ldi A 255
+	ld  A
 
-	ldi r1 255
+	ldi B 255
 	cmp
 	blt  sum
 

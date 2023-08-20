@@ -59,7 +59,17 @@ Opcode get_opcode_for_value(uint8_t opcode) {
 
 Opcode get_opcode_of_instruction(const std::vector<std::string> &symbols) {
     if (symbols[0] == "mov") {
-        const uint8_t source_reg = std::stoi(symbols[1].substr(1, 1));
+        const std::string source_reg_string = symbols[1];
+        uint8_t source_reg;
+        if (source_reg_string == "A") {
+            source_reg = 0;
+        } else if (source_reg_string == "B") {
+            source_reg = 1;
+        } else if (source_reg_string == "L") {
+            source_reg = 2;
+        } else {
+            source_reg = 3;
+        }
         if (source_reg == 0) {
             return Opcode::MOVA;
         } else if (source_reg == 1) {
