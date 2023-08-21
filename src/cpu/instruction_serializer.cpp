@@ -301,9 +301,9 @@ deserialize_instruction(const std::vector<uint8_t> bytes) {
         return {opcode_string, deserialize_address_value(bytes[1], bytes[2])};
 
     case cpu::Opcode::MOVA:
-        return {opcode_string, "r0", deserialize_register(bytes[0])};
+        return {opcode_string, "A", deserialize_register(bytes[0])};
     case cpu::Opcode::MOVB:
-        return {opcode_string, "r1", deserialize_register(bytes[0])};
+        return {opcode_string, "B", deserialize_register(bytes[0])};
 
     case cpu::Opcode::LDA:
     case cpu::Opcode::STA:
