@@ -16,13 +16,13 @@ std::string byte_to_hex_string(const uint8_t val) {
 }
 
 uint8_t serialize_register_string(const std::string &reg) {
-    if (reg == "r0") {
+    if (reg == "A") {
         return 0;
-    } else if (reg == "r1") {
+    } else if (reg == "B") {
         return 1;
-    } else if (reg == "r2") {
+    } else if (reg == "L") {
         return 2;
-    } else if (reg == "r3") {
+    } else if (reg == "U") {
         return 3;
     }
     throw std::invalid_argument("Unsupported register string: " + reg);
@@ -141,13 +141,13 @@ serialize_out_instruction(const uint8_t opcode,
 std::string deserialize_register(const uint8_t rom_byte) {
     uint8_t reg = rom_byte & 0x03;
     if (reg == 0) {
-        return "r0";
+        return "A";
     } else if (reg == 1) {
-        return "r1";
+        return "B";
     } else if (reg == 2) {
-        return "r2";
+        return "L";
     } else {
-        return "r3";
+        return "U";
     }
 }
 
@@ -299,9 +299,9 @@ deserialize_instruction(const std::vector<uint8_t> bytes) {
         return {opcode_string, deserialize_address_value(bytes[1], bytes[2])};
 
     case cpu::Opcode::MOVA:
-        return {opcode_string, "r0", deserialize_register(bytes[0])};
+        return {opcode_string, "A", deserialize_register(bytes[0])};
     case cpu::Opcode::MOVB:
-        return {opcode_string, "r1", deserialize_register(bytes[0])};
+        return {opcode_string, "B", deserialize_register(bytes[0])};
 
     case cpu::Opcode::LDA:
     case cpu::Opcode::STA:

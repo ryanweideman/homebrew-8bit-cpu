@@ -9,8 +9,8 @@ TEST(IntegrationTest, Basic) {
     // clang-format off
     const ProgramRom prog_rom = assembler::assemble({
         "start:", 
-        "  ldi r0 5", 
-        "  ldi r1 7", 
+        "  ldi A 5", 
+        "  ldi B 7", 
         "  nop", 
         "end:", 
         "  b end"});
@@ -80,12 +80,12 @@ TEST(IntegrationTest, Add_carry) {
     // clang-format off
     const ProgramRom prog_rom =
         assembler::assemble({
-            "ldi r0 128", 
-            "ldi r1 128", 
-            "add r0", 
-            "ldi r0 30",
-            "ldi r1 7", 
-            "addc r0"});
+            "ldi A 128", 
+            "ldi B 128", 
+            "add A", 
+            "ldi A 30",
+            "ldi B 7", 
+            "addc A"});
     // clang-format on
 
     const DecoderRom decoder_rom = decoder::generate_decode_logic();
