@@ -25,10 +25,10 @@ MacroGenerator::get_instructions(const std::string &macro_name,
     count_table_.emplace(macro_name, count + 1);
 
     std::vector<std::vector<std::string>> translated_instructions;
-    for (const std::vector<std::string> untranslated_instruction :
+    for (const std::vector<std::string> &untranslated_instruction :
          untranslated_instructions) {
         std::vector<std::string> translated_instruction;
-        for (const std::string token : untranslated_instruction) {
+        for (const std::string &token : untranslated_instruction) {
             std::string new_token;
             // Translate args
             for (size_t arg = 0; arg < args.size(); arg++) {

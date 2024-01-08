@@ -83,7 +83,7 @@ Opcode get_opcode_of_instruction(const std::vector<std::string> &symbols) {
         }
     }
     std::string error;
-    for (const std::string symbol : symbols) {
+    for (const std::string &symbol : symbols) {
         error += symbol + " ";
     }
     throw std::runtime_error("Failed to get Opcode for line: " + error);

@@ -16,13 +16,13 @@ std::string byte_to_hex_string(const uint8_t val) {
 }
 
 uint8_t serialize_register_string(const std::string &reg) {
-    if (reg == "A") {
+    if (reg == "r0") {
         return 0;
-    } else if (reg == "B") {
+    } else if (reg == "r1") {
         return 1;
-    } else if (reg == "L") {
+    } else if (reg == "r2") {
         return 2;
-    } else if (reg == "U") {
+    } else if (reg == "r3") {
         return 3;
     }
     throw std::invalid_argument("Unsupported register string: " + reg);
@@ -115,16 +115,14 @@ serialize_move_type_instruction(const std::vector<std::string> &tokens) {
     const uint8_t source_reg      = serialize_register_string(tokens[1]);
     const uint8_t destination_reg = serialize_register_string(tokens[2]);
 
-    if (source_reg > 1) {
-        throw std::invalid_argument("Cannot mov source register " +
-                                    std::string(tokens[1]));
-    }
-
     uint8_t instruction_reg;
     if (source_reg == 0) {
         instruction_reg = (cpu::M_MOVA << 2) | destination_reg;
     } else if (source_reg == 1) {
         instruction_reg = (cpu::M_MOVB << 2) | destination_reg;
+    } else {
+        throw std::invalid_argument("Cannot mov source register " +
+                            std::string(tokens[1]));
     }
 
     return {instruction_reg};
@@ -143,13 +141,13 @@ serialize_out_instruction(const uint8_t opcode,
 std::string deserialize_register(const uint8_t rom_byte) {
     uint8_t reg = rom_byte & 0x03;
     if (reg == 0) {
-        return "A";
+        return "r0";
     } else if (reg == 1) {
-        return "B";
+        return "r1";
     } else if (reg == 2) {
-        return "L";
+        return "r2";
     } else {
-        return "U";
+        return "r3";
     }
 }
 
@@ -301,9 +299,9 @@ deserialize_instruction(const std::vector<uint8_t> bytes) {
         return {opcode_string, deserialize_address_value(bytes[1], bytes[2])};
 
     case cpu::Opcode::MOVA:
-        return {opcode_string, "A", deserialize_register(bytes[0])};
+        return {opcode_string, "r0", deserialize_register(bytes[0])};
     case cpu::Opcode::MOVB:
-        return {opcode_string, "B", deserialize_register(bytes[0])};
+        return {opcode_string, "r1", deserialize_register(bytes[0])};
 
     case cpu::Opcode::LDA:
     case cpu::Opcode::STA:
