@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 3.16.3)
+cmake_minimum_required(VERSION 3.28.1)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_COMPILER g++)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../) 
+project(cpu)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
+
+cmake_policy(SET CMP0135 NEW)
 include(FetchContent)
 FetchContent_Declare(
   	googletest
@@ -12,9 +15,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-project(cpu)
-
 add_compile_options(-Wall -Werror -Wextra -Werror=switch-enum)
+
+include(CTest)
+include(GoogleTest)
 
 add_subdirectory(src)
 add_subdirectory(test)
+
+enable_testing()

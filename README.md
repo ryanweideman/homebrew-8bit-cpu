@@ -9,5 +9,6 @@ A customed designed cpu architecture, assembly language and assembler, and emula
 The [GoogleTest](https://github.com/google/googletest) framework is used for all testing.  
 To run the tests, simply run the following after building the project:
 ```
-./test
+cd build
+ctest
 ```

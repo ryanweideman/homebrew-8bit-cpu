@@ -1,3 +1,3 @@
 add_executable(integration_tests test.cpp)
-target_link_libraries(integration_tests assembler cpu decoder emulator gtest_main)
-add_test(NAME integration_tests COMMAND $<TARGET_FILE:integration_tests>)
+target_link_libraries(integration_tests assembler cpu decoder emulator gtest gtest_main)
+gtest_discover_tests(integration_tests)
