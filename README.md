@@ -7,9 +7,9 @@ A customed designed 8-bit cpu architecture, assembly language and assembler, and
 * 8-bit CISC, load store, microcoded architecture
 * Instruction set contains 37 instructions with support for up to 64
 * Up to 16 microcoded instructions per assembly instruction
-* 32KB ROM
-* 32KB RAM
-* 10kHz max clock rate (tested)
+* 32 KB ROM
+* 32 KB RAM
+* 10 kHz max clock rate (tested)
 * LCD Screen Output
 
 <img src="/media/hello_world.gif" width="80%"/>
@@ -27,7 +27,7 @@ The assembler executable is available in the ```build/bin/``` directory. Below i
 ```
 ./assembler ../../examples/hello_world.asm hello_world.hex
 ```
-The output hex file can be programmed to the 32KB ROM chip with a [28C256-EEPROM-Programmer](https://github.com/ryanweideman/28C256-EEPROM-Programmer). 
+The output hex file can be programmed to the 32 KB ROM chip with a [28C256-EEPROM-Programmer](https://github.com/ryanweideman/28C256-EEPROM-Programmer). 
 ## Emulate
 The emulator executable is also available in the ```build/bin/``` directory. Below is an example command of how ```hello_world.hex``` could be emulated.  
 ```
