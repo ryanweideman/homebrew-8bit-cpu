@@ -25,11 +25,13 @@ The assembler executable is available in the ```build/bin/``` directory. Below i
 ```
 ./assembler ../../examples/hello_world.asm hello_world.hex
 ```
+The output hex file can be programmed to the 32KB ROM chip with a [28C256-EEPROM-Programmer](https://github.com/ryanweideman/28C256-EEPROM-Programmer). 
 ## Emulate
 The emulator executable is also available in the ```build/bin/``` directory. Below is an example command of how ```hello_world.hex``` could be emulated.  
 The emulator output is demonstrated below for a sample program.
 
 <img src="/media/emulator.gif" width="30%"/>
+
 ## Test
 The [GoogleTest](https://github.com/google/googletest) framework is used for all testing.  
 To run the tests, navigate to the build directory and run the following after building the project:
