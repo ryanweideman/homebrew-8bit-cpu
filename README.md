@@ -13,7 +13,7 @@ A customed designed 8-bit cpu architecture, assembly language and assembler, and
 * LCD Screen Output
 
 <img src="/media/hello_world.gif" width="80%"/>
-The CPU executing ```hello_world.asm``` at a 7 Hz clock rate.
+The CPU executing "Hello World!" at a 7 Hz clock rate.
 
 ## Build
 To build the project, run the following from the root directory of the project
