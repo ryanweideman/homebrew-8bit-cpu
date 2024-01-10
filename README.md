@@ -6,12 +6,14 @@ A customed designed 8-bit cpu architecture, assembly language and assembler, and
 ## Features
 * 8-bit CISC, load store, microcoded architecture
 * Instruction set contains 37 instructions with support for up to 64
-* Max of 16 microcode instructions per assembly instruction
+* Up to 16 microcoded instructions per assembly instruction
 * 32KB ROM
 * 32KB RAM
+* 10kHz max clock rate (tested)
 * LCD Screen Output
 
 <img src="/media/hello_world.gif" width="80%"/>
+The CPU executing ```hello_world.asm``` at a 7 Hz clock rate.
 
 ## Build
 To build the project, run the following from the root directory of the project
