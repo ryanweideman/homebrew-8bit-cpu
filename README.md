@@ -11,10 +11,29 @@ A custom designed 8-bit cpu architecture, assembly language and assembler, and e
 * 32 KB RAM
 * 10 kHz max clock rate (tested)
 * LCD Screen Output
-
+  
+ _The CPU executing "Hello World!" at a 7 Hz clock rate._
 <img src="/media/hello_world.gif" width="80%"/>
 
- _The CPU executing "Hello World!" at a 7 Hz clock rate._
+_A sample of the assembly language_
+```
+# Fibonacci up to 255
+
+initialize:
+    ldi A 1    # Load 1 to register A
+    ldi B 1    # Load 1 to register B
+    
+loop:
+    sta A 0    # Store register A into RAM address 0 
+    add A      # Add A + B and store result in register A
+    bc done    # if A + B > 255, branch to done
+    lda B 0    # Load the previous value of A from address 0 into register B
+    b loop     # Repeat the calculation
+
+done: 
+    lda A 0    # Recover the highest Fibonacci number 
+    b done     # Endlessly loop
+```
 
 ## Build
 To build the project, run the following from the root directory of the project
