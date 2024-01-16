@@ -11,7 +11,8 @@ A custom designed 8-bit cpu architecture, assembly language and assembler, and e
 * 32 KB RAM
 * 10 kHz max clock rate (tested)
 * LCD Screen Output
-  
+
+## Demos
  _The CPU executing "Hello World!" at a 7 Hz clock rate!_
 <img src="/media/hello_world.gif" width="80%"/>
 
