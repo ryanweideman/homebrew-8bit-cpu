@@ -34,6 +34,9 @@ done:
     lda A 0    # Recover the highest Fibonacci number 
     b done     # Endlessly loop
 ```
+_Emulating the above program that calculates the fibonacci numbers up to 233. Key an eye on register A!__
+
+<img src="/media/fibonacci.gif" width="50%"/>
 
 ## Build
 To build the project, run the following from the root directory of the project
@@ -53,9 +56,6 @@ The emulator executable is also available in the ```build/bin/``` directory. Bel
 ```
 ./emulator hello_world.hex
 ```
-The emulator output is demonstrated below for a sample program.
-
-<img src="/media/emulator.gif" width="30%"/>
 
 ## Test
 The [GoogleTest](https://github.com/google/googletest) framework is used for all testing.  
