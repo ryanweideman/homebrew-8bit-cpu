@@ -12,12 +12,13 @@ A custom designed 8-bit cpu architecture, assembly language and assembler, and e
 * 10 kHz max clock rate (tested)
 * LCD Screen Output
   
- _The CPU executing "Hello World!" at a 7 Hz clock rate._
+ _The CPU executing "Hello World!" at a 7 Hz clock rate!_
 <img src="/media/hello_world.gif" width="80%"/>
 
-_A sample of the assembly language_
+_A sample of the assembly language!_
 ```
-# Fibonacci up to 255
+# This program calculates the fibonacci numbers up to 233
+# The result is stored in register A
 
 initialize:
     ldi A 1    # Load 1 to register A
@@ -26,16 +27,15 @@ initialize:
 loop:
     sta A 0    # Store register A into RAM address 0 
     add A      # Add A + B and store result in register A
-    bc done    # if A + B > 255, branch to done
-    lda B 0    # Load the previous value of A from address 0 into register B
-    b loop     # Repeat the calculation
+    bc  done   # if A + B > 255, branch to done
+    lda B 0    # Load the previous value of A from RAM at address 0 into register B
+    b   loop   # Repeat the calculation
 
 done: 
-    lda A 0    # Recover the highest Fibonacci number 
-    b done     # Endlessly loop
+    lda A 0    # Recover register A from RAM - the highest Fibonacci number less than 255
+    b   done   # Endlessly loop
 ```
-_Emulating the above program that calculates the fibonacci numbers up to 233. Key an eye on register A!__
-
+_Emulating the above program that calculates the fibonacci numbers up to 233. Check out register A for the results!_
 <img src="/media/fibonacci.gif" width="50%"/>
 
 ## Build
