@@ -11,12 +11,12 @@ TEST(IntegrationTest, Basic) {
         "start:", 
         "  ldi A 5", 
         "  ldi B 7", 
-        "  nop", 
+        "  add A", 
         "end:", 
         "  b end"});
     // clang-format on
     const ProgramRom expected_rom = {0x3c, 0x05, 0x3d, 0x07,
-                                     0x84, 0x5c, 0x05, 0x00};
+                                     0x00, 0x5c, 0x05, 0x00};
     ASSERT_EQ(prog_rom, expected_rom);
 
     const DecoderRom decoder_rom = decoder::generate_decode_logic();
@@ -51,9 +51,9 @@ TEST(IntegrationTest, Basic) {
     ASSERT_EQ(0, emulator.get_current_state().upper_register);
     ASSERT_EQ(4, emulator.get_current_state().program_counter);
 
-    // execute nop
+    // execute add A
     emulator.advance_one_instruction();
-    ASSERT_EQ(5, emulator.get_current_state().a_register);
+    ASSERT_EQ(12, emulator.get_current_state().a_register);
     ASSERT_EQ(7, emulator.get_current_state().b_register);
     ASSERT_EQ(0, emulator.get_current_state().lower_register);
     ASSERT_EQ(0, emulator.get_current_state().upper_register);
@@ -61,7 +61,7 @@ TEST(IntegrationTest, Basic) {
 
     // execute b end
     emulator.advance_one_instruction();
-    ASSERT_EQ(5, emulator.get_current_state().a_register);
+    ASSERT_EQ(12, emulator.get_current_state().a_register);
     ASSERT_EQ(7, emulator.get_current_state().b_register);
     ASSERT_EQ(5, emulator.get_current_state().lower_register);
     ASSERT_EQ(0, emulator.get_current_state().upper_register);
@@ -69,7 +69,7 @@ TEST(IntegrationTest, Basic) {
 
     // execute b end
     emulator.advance_one_instruction();
-    ASSERT_EQ(5, emulator.get_current_state().a_register);
+    ASSERT_EQ(12, emulator.get_current_state().a_register);
     ASSERT_EQ(7, emulator.get_current_state().b_register);
     ASSERT_EQ(5, emulator.get_current_state().lower_register);
     ASSERT_EQ(0, emulator.get_current_state().upper_register);
