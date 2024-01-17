@@ -20,7 +20,8 @@ TEST(EmulatorTest, Add) {
     state.a_register           = 1;
     state.b_register           = 4;
 
-    Emulator emulator(state, prog_rom, decoder::generate_decode_logic());
+    const DecoderRom decoder_rom = decoder::generate_decode_logic();
+    Emulator emulator(state, prog_rom, decoder_rom);
 
     // falling edge : opcode loaded into IR
     emulator.advance_one_clock_edge();
@@ -57,7 +58,8 @@ TEST(EmulatorTest, Addi) {
     state.a_register           = 1;
     state.b_register           = 0;
 
-    Emulator emulator(state, prog_rom, decoder::generate_decode_logic());
+    const DecoderRom decoder_rom = decoder::generate_decode_logic();
+    Emulator emulator(state, prog_rom, decoder_rom);
     emulator.advance_one_instruction();
 
     ASSERT_EQ(4, emulator.get_current_state().instruction_register);
@@ -83,7 +85,8 @@ TEST(EmulatorTest, Sub) {
     state.a_register           = 7;
     state.b_register           = 5;
 
-    Emulator emulator(state, prog_rom, decoder::generate_decode_logic());
+    const DecoderRom decoder_rom = decoder::generate_decode_logic();
+    Emulator emulator(state, prog_rom, decoder_rom);
     emulator.advance_one_instruction();
 
     state.instruction_register = 0x0C;
