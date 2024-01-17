@@ -38,7 +38,7 @@ State set_flag_state(const State current_state, const bool is_carry_set,
     State next_state         = current_state;
     next_state.flag_register = 0;
     next_state.flag_register |= is_carry_set ? 0 : 1;
-    next_state.flag_register |= is_zero_set ? (1 << 1) : 0;
+    next_state.flag_register |= is_zero_set ? (1 << 1) : 0; // active low
     return next_state;
 }
 
@@ -147,10 +147,11 @@ State handle_falling_edge(State current_state, cpu::Microcode microcode,
         const uint8_t bounded_result = static_cast<uint8_t>(result & 0xFF);
         next_state =
             set_register_state(next_state, register_select, bounded_result);
-
         bool is_carry_set = ((result >> 8) & 1) == 1;
-        bool is_zero_set  = (result & 0xFF) == 0;
+        bool is_zero_set  = (bounded_result & 0xFF) == 0;
         next_state = set_flag_state(next_state, is_carry_set, is_zero_set);
+        printf("%u, %u, %d, %d", result, bounded_result, is_carry_set, is_zero_set);
+
         break;
     }
 
@@ -164,7 +165,7 @@ State handle_falling_edge(State current_state, cpu::Microcode microcode,
             set_register_state(next_state, register_select, bounded_result);
 
         bool is_carry_set = ((result >> 8) & 1) == 1;
-        bool is_zero_set  = (result & 0xFF) == 0;
+        bool is_zero_set  = (bounded_result & 0xFF) == 0;
         next_state = set_flag_state(next_state, is_carry_set, is_zero_set);
         break;
     }

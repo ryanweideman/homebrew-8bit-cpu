@@ -32,7 +32,8 @@ void Emulator::advance_one_clock_edge() {
         current_state_, clock_, prog_rom_, decoder_rom_);
 
     total_number_clock_cycles_ += clock_ == 1 ? 1 : 0;
-    if (current_state_.microcode_counter == 0 && clock_ == 1) {
+    if (current_state_.microcode_counter == 0 && clock_ == 1 &&
+        current_state_.program_counter < prog_rom_.size()) {
         total_number_instructions_++;
         current_opcode_ = cpu::get_opcode_for_value(
             prog_rom_[current_state_.program_counter] >> 2);
