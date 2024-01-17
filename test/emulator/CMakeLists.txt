@@ -1,0 +1,3 @@
+add_executable(emulator_tests emulator.cpp)
+target_link_libraries(emulator_tests assembler cpu decoder emulator gtest gtest_main)
+gtest_discover_tests(emulator_tests)
