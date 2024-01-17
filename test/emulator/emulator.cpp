@@ -72,3 +72,31 @@ TEST(EmulatorTest, Addi) {
     state.flag_register        = 1;
     ASSERT_EQ(state, emulator.get_current_state());
 }
+
+TEST(EmulatorTest, Sub) {
+    const ProgramRom prog_rom     = assembler::assemble({"sub A"});
+    const ProgramRom expected_rom = {0x0C};
+    ASSERT_EQ(prog_rom, expected_rom);
+
+    State state;
+    state.instruction_register = 0;
+    state.flag_register        = 0;
+    state.microcode_counter    = 0;
+    state.lower_register       = 0;
+    state.upper_register       = 0;
+    state.program_counter      = 0;
+    state.a_register           = 7;
+    state.b_register           = 5;
+
+    Emulator emulator(state, prog_rom, decoder::generate_decode_logic());
+    emulator.advance_one_instruction();
+
+    state.instruction_register = 0x0C;
+    state.program_counter      = 1;
+    state.microcode_counter    = 0;
+    state.a_register           = 2;
+    state.b_register           = 5;
+    state.flag_register        = 0;
+
+    ASSERT_EQ(state, emulator.get_current_state());
+}
