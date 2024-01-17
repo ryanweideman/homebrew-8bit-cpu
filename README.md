@@ -1,5 +1,5 @@
 # homebrew-8bit-cpu
-[![homebrew-8bit-cpu-test](https://github.com/ryanweideman/homebrew-8bit-cpu/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/ryanweideman/homebrew-8bit-cpu/actions/workflows/c-cpp.yml)
+[![homebrew-8bit-cpu-test](https://github.com/ryanweideman/homebrew-8bit-cpu/actions/workflows/ci.yml/badge.svg)](https://github.com/ryanweideman/homebrew-8bit-cpu/actions/workflows/ci.yml)
 
 A custom designed 8-bit cpu architecture, assembly language and assembler, and emulator. The aim was to design a fully functional and programmable CPU, and implement the CPU in hardware with the fewest number of discrete integrated circuits possible.
 
