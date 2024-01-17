@@ -24,26 +24,22 @@ TEST(EmulatorTest, Add) {
 
     // falling edge : opcode loaded into IR
     emulator.advance_one_clock_edge();
-    state.instruction_register = 1;
-    ASSERT_EQ(state, emulator.get_current_state());
+    ASSERT_EQ(1, emulator.get_current_state().instruction_register);
 
     // rising edge : PC and UC inc
     emulator.advance_one_clock_edge();
-    state.program_counter   = 1;
-    state.microcode_counter = 1;
-    ASSERT_EQ(state, emulator.get_current_state());
+    ASSERT_EQ(1, emulator.get_current_state().program_counter);
+    ASSERT_EQ(1, emulator.get_current_state().microcode_counter);
 
     // falling edge : A + B result stored in B
     emulator.advance_one_clock_edge();
-    state.a_register    = 1;
-    state.b_register    = 5;
-    state.flag_register = 1;
-    ASSERT_EQ(state, emulator.get_current_state());
+    ASSERT_EQ(1, emulator.get_current_state().a_register);
+    ASSERT_EQ(5, emulator.get_current_state().b_register);
+    ASSERT_EQ(1, emulator.get_current_state().flag_register);
 
     // rising edge : UC reset
     emulator.advance_one_clock_edge();
-    state.microcode_counter = 0;
-    ASSERT_EQ(state, emulator.get_current_state());
+    ASSERT_EQ(0, emulator.get_current_state().microcode_counter);
 }
 
 TEST(EmulatorTest, Addi) {
@@ -64,13 +60,12 @@ TEST(EmulatorTest, Addi) {
     Emulator emulator(state, prog_rom, decoder::generate_decode_logic());
     emulator.advance_one_instruction();
 
-    state.instruction_register = 4;
-    state.program_counter      = 2;
-    state.microcode_counter    = 0;
-    state.a_register           = 24;
-    state.b_register           = 23;
-    state.flag_register        = 1;
-    ASSERT_EQ(state, emulator.get_current_state());
+    ASSERT_EQ(4, emulator.get_current_state().instruction_register);
+    ASSERT_EQ(2, emulator.get_current_state().program_counter);
+    ASSERT_EQ(0, emulator.get_current_state().microcode_counter);
+    ASSERT_EQ(24, emulator.get_current_state().a_register);
+    ASSERT_EQ(23, emulator.get_current_state().b_register);
+    ASSERT_EQ(1, emulator.get_current_state().flag_register);
 }
 
 TEST(EmulatorTest, Sub) {
@@ -98,5 +93,10 @@ TEST(EmulatorTest, Sub) {
     state.b_register           = 5;
     state.flag_register        = 0;
 
-    ASSERT_EQ(state, emulator.get_current_state());
+    ASSERT_EQ(0x0C, emulator.get_current_state().instruction_register);
+    ASSERT_EQ(1, emulator.get_current_state().program_counter);
+    ASSERT_EQ(0, emulator.get_current_state().microcode_counter);
+    ASSERT_EQ(2, emulator.get_current_state().a_register);
+    ASSERT_EQ(5, emulator.get_current_state().b_register);
+    ASSERT_EQ(0, emulator.get_current_state().flag_register);
 }
