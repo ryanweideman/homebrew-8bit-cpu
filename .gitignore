@@ -3,6 +3,10 @@ assembler
 decoder
 emulator
 
+# Ignore directories
+Testing/
+.vscode/
+
 # Ignore test executables
 cpu_tests
 integration_tests
