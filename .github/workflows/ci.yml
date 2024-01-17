@@ -24,4 +24,4 @@ jobs:
 
     - name: Test
       working-directory: ./build
-      run: ctest -C Release
+      run: ctest -C Release --output-on-failure
