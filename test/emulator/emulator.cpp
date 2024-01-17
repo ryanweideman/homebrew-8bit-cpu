@@ -100,12 +100,5 @@ TEST(EmulatorTest, Sub) {
     state.a_register           = 2;
     state.b_register           = 5;
     state.flag_register        = 0;
-
-    state.instruction_register = 0x0C;
-    state.program_counter      = 1;
-    state.microcode_counter    = 0;
-    state.a_register           = 2;
-    state.b_register           = 5;
-    state.flag_register        = 0;
     ASSERT_EQ(state, emulator.get_current_state());
 }

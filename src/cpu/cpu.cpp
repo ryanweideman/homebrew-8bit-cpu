@@ -54,7 +54,8 @@ Opcode get_opcode_for_value(uint8_t opcode) {
             return instruction.opcode_;
         }
     }
-    throw std::runtime_error("Failed to get Opcode for value");
+    throw std::runtime_error("Failed to get Opcode for value: " +
+                             std::to_string(opcode));
 }
 
 Opcode get_opcode_of_instruction(const std::vector<std::string> &symbols) {
