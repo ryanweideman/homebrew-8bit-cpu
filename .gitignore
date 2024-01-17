@@ -3,6 +3,9 @@ assembler
 decoder
 emulator
 
+# Ignore files
+.DS_Store
+
 # Ignore directories
 Testing/
 .vscode/
