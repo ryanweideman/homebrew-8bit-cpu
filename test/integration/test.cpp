@@ -4,8 +4,9 @@
 #include <cpu/state.h>
 #include <decoder/decoder.h>
 #include <emulator/emulator.h>
+#include <testing_commons/commons.h>
 
-TEST(IntegrationTest, Basic) {
+TEST(IntegrationTest, BasicAddition) {
     // clang-format off
     const ProgramRom prog_rom = assembler::assemble({
         "start:", 
@@ -21,59 +22,55 @@ TEST(IntegrationTest, Basic) {
 
     const DecoderRom decoder_rom = decoder::generate_decode_logic();
 
-    State initial_state;
-    initial_state.a_register     = 0;
-    initial_state.b_register     = 0;
-    initial_state.lower_register = 0;
-    initial_state.upper_register = 0;
+    State state;
+    state.a_register      = 0;
+    state.b_register      = 0;
+    state.lower_register  = 0;
+    state.upper_register  = 0;
+    state.program_counter = 0;
 
-    Emulator emulator(initial_state, prog_rom, decoder_rom);
+    Emulator emulator(state, prog_rom, decoder_rom);
 
-    ASSERT_EQ(0, emulator.get_current_state().a_register);
-    ASSERT_EQ(0, emulator.get_current_state().b_register);
-    ASSERT_EQ(0, emulator.get_current_state().lower_register);
-    ASSERT_EQ(0, emulator.get_current_state().upper_register);
-    ASSERT_EQ(0, emulator.get_current_state().program_counter);
-
-    // execute ldi r0 5
+    // execute ldi A 5
     emulator.advance_one_instruction();
-    ASSERT_EQ(5, emulator.get_current_state().a_register);
-    ASSERT_EQ(0, emulator.get_current_state().b_register);
-    ASSERT_EQ(0, emulator.get_current_state().lower_register);
-    ASSERT_EQ(0, emulator.get_current_state().upper_register);
-    ASSERT_EQ(2, emulator.get_current_state().program_counter);
+    state.instruction_register = 60;
+    state.program_counter      = 2;
+    state.a_register           = 5;
+    ASSERT_TRUE(testing_commons::assert_state_equals(
+        state, emulator.get_current_state()));
 
-    // execute ldi r1 7
+    // execute ldi B 7
     emulator.advance_one_instruction();
-    ASSERT_EQ(5, emulator.get_current_state().a_register);
-    ASSERT_EQ(7, emulator.get_current_state().b_register);
-    ASSERT_EQ(0, emulator.get_current_state().lower_register);
-    ASSERT_EQ(0, emulator.get_current_state().upper_register);
-    ASSERT_EQ(4, emulator.get_current_state().program_counter);
+    state.instruction_register = 61;
+    state.program_counter      = 4;
+    state.b_register           = 7;
+    ASSERT_TRUE(testing_commons::assert_state_equals(
+        state, emulator.get_current_state()));
 
     // execute add A
     emulator.advance_one_instruction();
-    ASSERT_EQ(12, emulator.get_current_state().a_register);
-    ASSERT_EQ(7, emulator.get_current_state().b_register);
-    ASSERT_EQ(0, emulator.get_current_state().lower_register);
-    ASSERT_EQ(0, emulator.get_current_state().upper_register);
-    ASSERT_EQ(5, emulator.get_current_state().program_counter);
+    state.instruction_register = 0;
+    state.program_counter      = 5;
+    state.a_register           = 12;
+    state.flag_register        = 1;
+    ASSERT_TRUE(testing_commons::assert_state_equals(
+        state, emulator.get_current_state()));
 
     // execute b end
     emulator.advance_one_instruction();
-    ASSERT_EQ(12, emulator.get_current_state().a_register);
-    ASSERT_EQ(7, emulator.get_current_state().b_register);
-    ASSERT_EQ(5, emulator.get_current_state().lower_register);
-    ASSERT_EQ(0, emulator.get_current_state().upper_register);
-    ASSERT_EQ(5, emulator.get_current_state().program_counter);
+    state.instruction_register = 92;
+    state.lower_register       = 5;
+    state.upper_register       = 0;
+    ASSERT_TRUE(testing_commons::assert_state_equals(
+        state, emulator.get_current_state()));
 
     // execute b end
     emulator.advance_one_instruction();
-    ASSERT_EQ(12, emulator.get_current_state().a_register);
-    ASSERT_EQ(7, emulator.get_current_state().b_register);
-    ASSERT_EQ(5, emulator.get_current_state().lower_register);
-    ASSERT_EQ(0, emulator.get_current_state().upper_register);
-    ASSERT_EQ(5, emulator.get_current_state().program_counter);
+    state.instruction_register = 92;
+    state.lower_register       = 5;
+    state.upper_register       = 0;
+    ASSERT_TRUE(testing_commons::assert_state_equals(
+        state, emulator.get_current_state()));
 }
 
 TEST(IntegrationTest, Add_carry) {
