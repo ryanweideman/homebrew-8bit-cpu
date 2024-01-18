@@ -52,6 +52,35 @@ TEST(EmulatorTest, Add) {
         state, emulator.get_current_state()));
 }
 
+TEST(EmulatorTest, AddProducesOverflow) {
+    const ProgramRom prog_rom     = assembler::assemble({"add A"});
+    const ProgramRom expected_rom = {0x00};
+    ASSERT_EQ(prog_rom, expected_rom);
+
+    State state;
+    state.instruction_register = 0;
+    state.flag_register        = 0;
+    state.microcode_counter    = 0;
+    state.lower_register       = 0;
+    state.upper_register       = 0;
+    state.program_counter      = 0;
+    state.a_register           = 255;
+    state.b_register           = 255;
+
+    const DecoderRom decoder_rom = decoder::generate_decode_logic();
+    Emulator emulator(state, prog_rom, decoder_rom);
+    emulator.advance_one_instruction();
+
+    state.instruction_register = 0;
+    state.program_counter      = 1;
+    state.microcode_counter    = 0;
+    state.a_register           = 254;
+    state.b_register           = 255;
+    state.flag_register        = 0;
+    ASSERT_TRUE(testing_commons::assert_state_equals(
+        state, emulator.get_current_state()));
+}
+
 TEST(EmulatorTest, Addi) {
     const ProgramRom prog_rom     = assembler::assemble({"addi A 23"});
     const ProgramRom expected_rom = {0x04, 0x17};
