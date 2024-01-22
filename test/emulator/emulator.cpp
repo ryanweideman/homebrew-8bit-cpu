@@ -196,3 +196,34 @@ TEST(EmulatorTest, Subi) {
     ASSERT_TRUE(testing_commons::assert_state_equals(
         state, emulator.get_current_state()));
 }
+
+TEST(EmulatorTest, Not) {
+    const ProgramRom prog_rom     = assembler::assemble({"not B"});
+    const ProgramRom expected_rom = {0x19};
+    ASSERT_EQ(prog_rom, expected_rom);
+
+    State state;
+    state.instruction_register = 0;
+    state.flag_register        = 0;
+    state.microcode_counter    = 0;
+    state.lower_register       = 0;
+    state.upper_register       = 0;
+    state.program_counter      = 0;
+    state.a_register           = 7;
+    state.b_register           = 0;
+
+    const DecoderRom decoder_rom = decoder::generate_decode_logic();
+    Emulator emulator(state, prog_rom, decoder_rom);
+    emulator.advance_one_instruction();
+
+    state.instruction_register = 0x19;
+    state.flag_register        = 1;
+    state.microcode_counter    = 0;
+    state.lower_register       = 0;
+    state.upper_register       = 0;
+    state.program_counter      = 1;
+    state.a_register           = 7;
+    state.b_register           = 248;
+    ASSERT_TRUE(testing_commons::assert_state_equals(
+        state, emulator.get_current_state()));
+}
