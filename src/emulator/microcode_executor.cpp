@@ -204,13 +204,19 @@ State handle_falling_edge(State current_state, cpu::Microcode microcode,
     case cpu::Microcode::NOT_A: {
         uint8_t result = ~current_state.a_register;
         next_state = set_register_state(next_state, register_select, result);
-        next_state.flag_register = 3;
+        
+        bool is_carry_set = ((result >> 8) & 1) == 1;
+        bool is_zero_set  = (result & 0xFF) == 0;
+        next_state = set_flag_state(next_state, is_carry_set, is_zero_set);
         break;
     }
     case cpu::Microcode::NOT_B: {
         uint8_t result = ~current_state.b_register;
         next_state = set_register_state(next_state, register_select, result);
-        next_state.flag_register = 3;
+        
+        bool is_carry_set = ((result >> 8) & 1) == 1;
+        bool is_zero_set  = (result & 0xFF) == 0;
+        next_state = set_flag_state(next_state, is_carry_set, is_zero_set);
         break;
     }
     case cpu::Microcode::CMP: {
